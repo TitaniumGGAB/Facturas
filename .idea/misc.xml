@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/drawable-v21/ic_menu_camera.xml" value="0.1395" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/drawable-v21/ic_menu_gallery.xml" value="0.114" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/activity_detalle.xml" value="0.1947463768115942" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/app_bar_main.xml" value="0.22327898550724637" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/content_main.xml" value="0.2421875" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/fragment_ajustes.xml" value="0.2421875" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/fragment_detalle.xml" value="0.2421875" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/fragment_detalle_factura.xml" value="0.2421875" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/fragment_detalle_modificar_cliente.xml" value="0.2421875" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/fragment_detalle_modificar_factura.xml" value="0.2421875" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/fragment_frasedia.xml" value="0.2421875" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/fragment_listado.xml" value="0.2421875" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/fragment_sample.xml" value="0.17844202898550723" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/fragmente_detalle_cliente.xml" value="0.4" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/item_listado.xml" value="0.536" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/item_listado_cliente.xml" value="0.536" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/item_listado_factura.xml" value="0.4" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/layout/nav_header_main.xml" value="0.2421875" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/menu/activity_main_drawer.xml" value="0.6" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/menu/main.xml" value="0.2421875" />
+        <entry key="..\:/Users/guill/Facturas/app/src/main/res/xml/network_security_config.xml" value="0.22327898550724637" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

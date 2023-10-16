@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_clientes"
+            android:icon="@drawable/icono_clientes"
+            android:title="Clientes"/>
+        <item
+            android:id="@+id/nav_facturas"
+            android:icon="@drawable/icono_factura"
+            android:title="Facturas"/>
+        <item
+            android:id="@+id/nav_facturas_borradores"
+            android:icon="@drawable/icono_borrador"
+            android:title="Borradores"/>
+        <item
+            android:id="@+id/nav_facturas_pendientes_pago"
+            android:icon="@drawable/icono_pago_pendiente"
+            android:title="Facturas pendientes de pago"/>
+    </group>
+
+    <item android:title="Modificar">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_modificar_cliente"
+                    android:icon="@drawable/icono_clientes"
+                    android:title="Modificar cliente"/>
+                <item
+                    android:id="@+id/nav_modificar_factura"
+                    android:icon="@drawable/icono_factura"
+                    android:title="Modificar factura"/>
+            </group>
+        </menu>
+    </item>
+
+</menu>
