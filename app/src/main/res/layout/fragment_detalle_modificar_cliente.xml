@@ -6,66 +6,108 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/editTextTextNombreCliente"
+        android:id="@+id/editTextNombreCliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="28dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Nombre Cliente"
+        android:text="Nombre"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextApellidosClientes"
+        android:id="@+id/editTextApellidosCliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Apellidos Cliente"
+        android:text="Apellidos"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextNombreCliente" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNombreCliente" />
 
     <EditText
-        android:id="@+id/editTextTextCif"
+        android:id="@+id/editTextTelefonoCliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Cif Cliente"
+        android:inputType="phone"
+        android:text="Telefono"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextApellidosClientes" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextApellidosCliente" />
 
     <EditText
-        android:id="@+id/editTextTextDireccionCliente"
+        android:id="@+id/editTextCorreoCliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Direccion Cliente"
+        android:inputType="textEmailAddress"
+        android:text="Email"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextCif" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTelefonoCliente" />
+
+    <EditText
+        android:id="@+id/editTextCifCliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:inputType="textCapCharacters"
+        android:text="CIF"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCorreoCliente" />
+
+    <EditText
+        android:id="@+id/editTextDireccionCliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:inputType="textCapCharacters"
+        android:text="Dirección de facturación"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCifCliente" />
 
     <Button
         android:id="@+id/buttonGuardarCliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="152dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="40dp"
         android:backgroundTint="#0C81CF"
+        android:textColor="#FFFFFF"
         android:text="Guardar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextDireccionCliente" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextDireccionCliente" />
+
+    <!--Este botón hay que ocultarlo cuando estemos vengamos para agregar a un cliente-->
+    <Button
+        android:id="@+id/buttonEliminarCliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#d91e1e"
+        android:textColor="#FFFFFF"
+        android:text="Guardar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonGuardarCliente" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
