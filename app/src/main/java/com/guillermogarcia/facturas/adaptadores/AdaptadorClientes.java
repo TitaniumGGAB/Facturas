@@ -40,7 +40,11 @@ public class AdaptadorClientes extends RecyclerView.Adapter<AdaptadorClientes.Cl
 
     @Override
     public int getItemCount () {
-        return clientes.size();
+        if (clientes != null) {
+            return clientes.size();
+        } else {
+            return 0;
+        }
     }
 
     public void setOnClickListener (View.OnClickListener listener){

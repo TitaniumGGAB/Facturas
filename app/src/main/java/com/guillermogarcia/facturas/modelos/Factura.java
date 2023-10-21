@@ -1,7 +1,8 @@
 package com.guillermogarcia.facturas.modelos;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+//import java.sql.Date;
 import java.util.GregorianCalendar;
 
 public class Factura implements Serializable, Comparable<Factura> {
@@ -110,6 +111,7 @@ public class Factura implements Serializable, Comparable<Factura> {
         return fechaModificacion;
     }
 
+
     public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
@@ -137,4 +139,5 @@ public class Factura implements Serializable, Comparable<Factura> {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+
 }

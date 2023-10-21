@@ -30,6 +30,8 @@ import com.guillermogarcia.facturas.modelos.Factura;
 import com.guillermogarcia.facturas.rest.RestClient;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -66,12 +68,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getClientesFacturas(){
-        apiService.getClientes().enqueue(new Callback<List<Cliente>>() {
+
+
+        clientes = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            Cliente cliente = new Cliente();
+            cliente.setNombre("Cliente " + i);
+            cliente.setApellidos("Apellidos " + i);
+            cliente.setCif("CIF " + i);
+            cliente.setDireccion("Dirección " + i);
+            clientes.add(cliente);
+        }
+
+        // Insertar facturas ficticias
+        facturas = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            Factura factura = new Factura();
+            factura.setNumeroFactura("Factura " + i);
+            // Establece otros campos de la factura aquí
+            factura.setBaseImponible(100.0 * i);
+            factura.setIvaPrecio(0.21);
+            factura.setPrecioTotal(factura.getBaseImponible() * (1 + factura.getIvaPrecio()));
+            // Asigna una fecha ficticia
+            GregorianCalendar fecha = new GregorianCalendar(2023, 8, i);
+            factura.setFecha(fecha);
+            factura.setFechaModificacion(new Date(fecha.getTimeInMillis()));
+            factura.setPagado(i % 2 == 0); // Alternar entre pagado y no pagado
+            factura.setBorrador(false);
+            factura.setCliente(clientes.get(i - 1)); // Asocia una factura a un cliente
+            facturas.add(factura);
+        }
+
+        // Ahora que tienes los datos ficticios, puedes establecerlos en tu FragmentListado
+        fragmentListado.setClientes(clientes);
+        fragmentListado.setFacturas(facturas);
+        loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
+
+        /*apiService.getClientes().enqueue(new Callback<List<Cliente>>() {
 
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Call<List<Cliente>> call, Response<List<Cliente>> response) {
                 if(response.isSuccessful()){
+                    Log.d("MainActivy", "Se han obtenido los datos");
                     assert response.body() != null;
 
                     clientes = (ArrayList<Cliente>) response.body();
@@ -80,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     for(Cliente cliente: response.body()) {
                         Log.i(MainActivity.class.getSimpleName(), cliente.toString());
                     }
+                }else{
+                    Log.d("MainActivy", "No se ah podido obtener los datos");
                 }
             }
 
@@ -113,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onFailure(Call<List<Factura>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
 
     }
 
