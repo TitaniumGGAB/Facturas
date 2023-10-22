@@ -4,6 +4,17 @@ import java.io.Serializable;
 import java.util.Date;
 //import java.sql.Date;
 import java.util.GregorianCalendar;
+/*Factura:
+id,
+cliente,
+numero_factura,
+fecha_modificacion,
+fecha_factura,
+(Integer) estado(pagado, pendiente, presupuesto),
+descripción,
+base_imponible,
+iva,
+total.*/
 
 public class Factura implements Serializable, Comparable<Factura> {
 

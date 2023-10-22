@@ -71,17 +71,64 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         clientes = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
+        //public Cliente(int id, String nombre, String apellidos, String telefono, String email,  String cif, String direccion, Date fecha_agregado, List<Factura> facturas)
+        Cliente cliente1 = new Cliente(1, "Guillermo", "García Almeida", "633326028", "guillermogarciaalmeida@gmail.com", "53629333A", "Guerrillero Groc de sala 11", new Date(), null);
+        Cliente cliente2 = new Cliente(2, "Ana", "López", "123456789", "ana.lopez@example.com", "12345678B", "Calle Principal 123", new Date(), null);
+        Cliente cliente3 = new Cliente(3, "Pedro", "Sánchez", "987654321", "pedro.sanchez@example.com", "98765432C", "Avenida Central 456", new Date(), null);
+        Cliente cliente4 = new Cliente(4, "María", "Martínez", "555555555", "maria.martinez@example.com", "55555555D", "Plaza Mayor 789", new Date(), null);
+        Cliente cliente5 = new Cliente(5, "Carlos", "Fernández", "111122223", "carlos.fernandez@example.com", "11112222E", "Paseo del Parque 567", new Date(), null);
+        Cliente cliente6 = new Cliente(6, "Sofía", "Gómez", "444488889", "sofia.gomez@example.com", "44448888F", "Callejón Secreto 234", new Date(), null);
+        Cliente cliente7 = new Cliente(7, "Luis", "Rodríguez", "777799998", "luis.rodriguez@example.com", "77779999G", "Camino de Montaña 890", new Date(), null);
+        Cliente cliente8 = new Cliente(8, "Carmen", "Pérez", "999966667", "carmen.perez@example.com", "99996666H", "Ronda del Lago 1234", new Date(), null);
+        Cliente cliente9 = new Cliente(9, "Javier", "Hernández", "333322225", "javier.hernandez@example.com", "33332222I", "Avenida Costera 4321", new Date(), null);
+        Cliente cliente10 = new Cliente(10, "Isabel", "Díaz", "666611119", "isabel.diaz@example.com", "66661111J", "Plaza del Sol 5678", new Date(), null);
+        clientes.add(cliente1);
+        clientes.add(cliente2);
+        clientes.add(cliente3);
+        clientes.add(cliente4);
+        clientes.add(cliente5);
+        clientes.add(cliente6);
+        clientes.add(cliente7);
+        clientes.add(cliente8);
+        clientes.add(cliente9);
+        clientes.add(cliente10);
+
+
+        /*for (int i = 1; i <= 10; i++) {
             Cliente cliente = new Cliente();
             cliente.setNombre("Cliente " + i);
             cliente.setApellidos("Apellidos " + i);
             cliente.setCif("CIF " + i);
             cliente.setDireccion("Dirección " + i);
             clientes.add(cliente);
-        }
+        }*/
+
+        facturas = new ArrayList<>();
+
+        Factura factura1 = new Factura(1, "FAC001", new GregorianCalendar(2023, 8, 1), "Venta de productos", 100.0, 21.0, 121.0, new Date(), true, false, cliente1);
+        Factura factura2 = new Factura(2, "FAC002", new GregorianCalendar(2023, 8, 2), "Servicios de consultoría", 500.0, 105.0, 605.0, new Date(), false, false, cliente2);
+        Factura factura3 =  new Factura(3, "FAC003", new GregorianCalendar(2023, 8, 3), "Compra de material de oficina", 50.0, 10.5, 60.5, new Date(), true, false, cliente3);
+        Factura factura4 = new Factura(4, "FAC004", new GregorianCalendar(2023, 8, 4), "Venta de productos", 300.0, 63.0, 363.0, new Date(), false, false, cliente4);
+        Factura factura5 = new Factura(5, "FAC005", new GregorianCalendar(2023, 8, 5), "Servicios de diseño gráfico", 200.0, 42.0, 242.0, new Date(), true, false, cliente4);
+        Factura factura6 = new Factura(6, "FAC006", new GregorianCalendar(2023, 8, 6), "Compra de material de construcción", 800.0, 168.0, 968.0, new Date(), false, false, cliente4);
+        Factura factura7 = new Factura(7, "FAC007", new GregorianCalendar(2023, 8, 7), "Venta de productos", 120.0, 25.2, 145.2, new Date(), true, false, cliente1);
+        Factura factura8 = new Factura(8, "FAC008", new GregorianCalendar(2023, 8, 8), "Servicios de marketing", 350.0, 73.5, 423.5, new Date(), false, false, cliente5);
+        Factura factura9 = new Factura(9, "FAC009", new GregorianCalendar(2023, 8, 9), "Venta de productos", 75.0, 15.75, 90.75, new Date(), true, false, cliente6);
+        Factura factura10 = new Factura(10, "FAC010", new GregorianCalendar(2023, 8, 10), "Mantenimiento de equipos", 450.0, 94.5, 544.5, new Date(), false, false, cliente7);
+
+        facturas.add(factura1);
+        facturas.add(factura2);
+        facturas.add(factura3);
+        facturas.add(factura4);
+        facturas.add(factura5);
+        facturas.add(factura6);
+        facturas.add(factura7);
+        facturas.add(factura8);
+        facturas.add(factura9);
+        facturas.add(factura10);
 
         // Insertar facturas ficticias
-        facturas = new ArrayList<>();
+        /*
         for (int i = 1; i <= 10; i++) {
             Factura factura = new Factura();
             factura.setNumeroFactura("Factura " + i);
@@ -97,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             factura.setBorrador(false);
             factura.setCliente(clientes.get(i - 1)); // Asocia una factura a un cliente
             facturas.add(factura);
-        }
+        }*/
 
         // Ahora que tienes los datos ficticios, puedes establecerlos en tu FragmentListado
         fragmentListado.setClientes(clientes);

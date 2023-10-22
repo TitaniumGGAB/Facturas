@@ -20,7 +20,9 @@ import com.guillermogarcia.facturas.listeners.IFacturaListener;
 import com.guillermogarcia.facturas.modelos.Cliente;
 import com.guillermogarcia.facturas.modelos.Factura;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FragmentDetalleCliente extends Fragment {
@@ -31,9 +33,12 @@ public class FragmentDetalleCliente extends Fragment {
     private RecyclerView rvListado;
     private IFacturaListener listenerFactura;
     private TextView tvNameCliente;
-    private TextView tvApellidosCliente ;
+    //private TextView tvApellidosCliente ;
+    private TextView tvTelefonoCliente;
+    private TextView tvEmailCliente;
     private TextView tvCifCliente;
     private TextView tvDireccionCliente;
+    private TextView tvFechaAgregadoCliente;
     private Button btModificarCliente;
     private Button btEliminarCliente;
 
@@ -74,9 +79,12 @@ public class FragmentDetalleCliente extends Fragment {
 
 
         tvNameCliente = inflatedView.findViewById(R.id.tvNameCliente);
-        tvApellidosCliente = inflatedView.findViewById(R.id.tvApellidosCliente);
+        //tvApellidosCliente = inflatedView.findViewById(R.id.tvApellidosCliente);
+        tvTelefonoCliente = inflatedView.findViewById(R.id.tvTelefonoCliente);
+        tvEmailCliente = inflatedView.findViewById(R.id.tvEmailCliente);
         tvCifCliente = inflatedView.findViewById(R.id.tvCifCliente);
         tvDireccionCliente = inflatedView.findViewById(R.id.tvDireccionCliente);
+        tvFechaAgregadoCliente = inflatedView.findViewById(R.id.tvFechaAgregadoCliente);
         btModificarCliente = inflatedView.findViewById(R.id.buttonModificarCliente);
         btEliminarCliente = inflatedView.findViewById(R.id.buttonEliminarCliente);
         return inflatedView;
@@ -85,14 +93,23 @@ public class FragmentDetalleCliente extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String nombreCliente = "Nombre: " + cliente.getNombre();
-        String apellidosCliente = "Apellidos" + cliente.getApellidos();
+        /*String nombreCliente = "Nombre: " + cliente.getNombre();
+        String apellidosCliente = "Apellidos" + cliente.getApellidos();*/
+        String nombreCliente = "Nombre: " + cliente.getNombre() + " " + cliente.getApellidos();
+        String telefonoCliente = "Teléfono: " + cliente.getTelefono();
+        String emailCliente = "Email: " + cliente.getEmail();
         String cifCliente = "CIF: " + cliente.getCif();
         String direccionCliente = "Dirección: " + cliente.getDireccion();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String fechaAgregadoCliente = dateFormat.format(cliente.getFecha_agregado());
+
         tvNameCliente.setText(nombreCliente);
-        tvApellidosCliente.setText(apellidosCliente);
+        //tvApellidosCliente.setText(apellidosCliente);
+        tvTelefonoCliente.setText(telefonoCliente);
+        tvEmailCliente.setText(emailCliente);
         tvCifCliente.setText(cifCliente);
         tvDireccionCliente.setText(direccionCliente);
+        tvFechaAgregadoCliente.setText(fechaAgregadoCliente);
         //btModificarCliente.?
         //btEliminarCliente.?
 

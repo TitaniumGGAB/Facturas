@@ -2,16 +2,21 @@ package com.guillermogarcia.facturas.modelos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Cliente implements Serializable {
 
+
     private int id;
     private String nombre;
-    private String apellidos;
     //Los apellidos son opcional porque una empresa no tiene apellidos
+    private String apellidos;
+    private String telefono;
+    private String email;
     private String cif;
     private String direccion;
+    private Date fecha_agregado;
 
     private List<Factura> facturas;
 
@@ -25,12 +30,15 @@ public class Cliente implements Serializable {
 
     }
 
-    public Cliente(int id, String nombre, String apellidos, String cif, String direccion, List<Factura> facturas) {
+    public Cliente(int id, String nombre, String apellidos, String telefono, String email,  String cif, String direccion, Date fecha_agregado, List<Factura> facturas) {
         this.id = id;
         this.nombre = nombre;
         this.apellidos = apellidos;
+        this.telefono = telefono;
+        this.email = email;
         this.cif = cif;
         this.direccion = direccion;
+        this.fecha_agregado = fecha_agregado;
         this.facturas = facturas;
     }
 
@@ -58,6 +66,22 @@ public class Cliente implements Serializable {
         this.apellidos = apellidos;
     }
 
+    public String getTelefono(){
+        return telefono;
+    }
+
+    public void setTelefono(String telefono){
+        this.telefono = telefono;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
     public String getCif() {
         return cif;
     }
@@ -74,6 +98,14 @@ public class Cliente implements Serializable {
         this.direccion = direccion;
     }
 
+    public Date getFecha_agregado(){
+        return fecha_agregado;
+    }
+
+    public void setFecha_agregado(Date fecha_agregado) {
+        this.fecha_agregado = fecha_agregado;
+    }
+
     public List<Factura> getFacturas() {
         return facturas;
     }
@@ -88,8 +120,11 @@ public class Cliente implements Serializable {
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", apellidos='" + apellidos + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", email='" + email + '\'' +
                 ", cif='" + cif + '\'' +
                 ", direccion='" + direccion + '\'' +
+                ", fecha agregado='" + fecha_agregado + '\'' +
                 ", facturas=" + facturas +
                 '}';
     }

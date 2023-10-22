@@ -117,14 +117,16 @@ public class AdaptadorFacturas extends RecyclerView.Adapter<AdaptadorFacturas.Fa
         }
 
         public void bindFactura(Factura factura, FragmentListado.TipoListado tipoListado) {
-                tvNumeroFactura.setText(factura.getNumeroFactura());
-                tvNombreCliente.setText(factura.getCliente().getNombre());
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MMMMM/yyyy");
-                tvFecha.setText(sdf.format(factura.getFecha().getTime()));
-                String precioTotal = factura.getPrecioTotal() + "";
-                tvPrecioTotal.setText(precioTotal);
-                tvNombreCliente.setText(factura.getCliente().getNombre());
+            tvNumeroFactura.setText(factura.getNumeroFactura());
+            tvNombreCliente.setText(factura.getCliente().getNombre());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MMMMM/yyyy");
+            tvFecha.setText(sdf.format(factura.getFecha().getTime()));
+            String precioTotal = factura.getPrecioTotal() + "";
+            tvPrecioTotal.setText(precioTotal);
+            tvNombreCliente.setText(factura.getCliente().getNombre());
+
         }
+
 
     }
 }
