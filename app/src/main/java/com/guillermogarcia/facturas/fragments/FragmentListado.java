@@ -1,6 +1,7 @@
 package com.guillermogarcia.facturas.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ public class FragmentListado extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("Check", "onCrete fragmentListado");
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if(bundle != null) {
@@ -74,7 +76,9 @@ public class FragmentListado extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvListado = view.findViewById(R.id.rvListado);
+        Log.d("Check", "En FragmentListado, antes de los if");
         if(tipoListado.equals(TipoListado.SEGUN_CLIENTE)){
+            Log.d("Check", "estamos en tipoListado.equals");
             AdaptadorClientes adaptadorClientes = new AdaptadorClientes(getActivity(), clientes);
             adaptadorClientes.setOnClickListener(new View.OnClickListener() {
                 @Override

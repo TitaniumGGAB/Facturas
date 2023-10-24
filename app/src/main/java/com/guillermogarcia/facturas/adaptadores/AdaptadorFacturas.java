@@ -103,25 +103,35 @@ public class AdaptadorFacturas extends RecyclerView.Adapter<AdaptadorFacturas.Fa
         private final TextView tvNombreCliente;
         private final TextView tvNumeroFactura;
         private final TextView tvFecha;
+        private final TextView tvBaseImponible;
+        private final TextView tvIva;
         private final TextView tvPrecioTotal;
         private final Context context;
 
         public FacturaViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
             this.context = context;
-            tvNombreCliente = itemView.findViewById(R.id.tvNameCliente);
+            tvNombreCliente = itemView.findViewById(R.id.tvNombreCliente);
             tvNumeroFactura = itemView.findViewById(R.id.tvNumeroFactura);
             tvFecha = itemView.findViewById(R.id.tvFecha);
+            tvBaseImponible = itemView.findViewById(R.id.tvBaseImponible);
+            tvIva = itemView.findViewById(R.id.tvIva);
             tvPrecioTotal = itemView.findViewById(R.id.tvPrecioTotal);
 
         }
 
         public void bindFactura(Factura factura, FragmentListado.TipoListado tipoListado) {
+            String nombreApellidosCliente = factura.getCliente().getNombre() + " " + factura.getCliente().getApellidos();
+            //String nombreApellidosCliente = factura.getCliente().getApellidos();
             tvNumeroFactura.setText(factura.getNumeroFactura());
-            tvNombreCliente.setText(factura.getCliente().getNombre());
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MMMMM/yyyy");
+           tvNombreCliente.setText(nombreApellidosCliente);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             tvFecha.setText(sdf.format(factura.getFecha().getTime()));
-            String precioTotal = factura.getPrecioTotal() + "";
+            String baseImponible = "Base: " + String.format("%.2f", factura.getBaseImponible()) + "€";
+            tvBaseImponible.setText(baseImponible);
+            String iva = "IVA: " + String.format("%.2f", factura.getIvaPrecio()) + "€";
+            tvIva.setText(iva);
+            String precioTotal = "Total: " + String.format("%.2f", factura.getPrecioTotal()) + "€";
             tvPrecioTotal.setText(precioTotal);
             tvNombreCliente.setText(factura.getCliente().getNombre());
 

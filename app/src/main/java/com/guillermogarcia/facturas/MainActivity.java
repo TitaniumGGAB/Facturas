@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         apiService = RestClient.getInstance();
+        Log.d("Check", "Este es un mensaje de prueba");
         getClientesFacturas();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         clientes = new ArrayList<>();
         //public Cliente(int id, String nombre, String apellidos, String telefono, String email,  String cif, String direccion, Date fecha_agregado, List<Factura> facturas)
-        Cliente cliente1 = new Cliente(1, "Guillermo", "García Almeida", "633326028", "guillermogarciaalmeida@gmail.com", "53629333A", "Guerrillero Groc de sala 11", new Date(), null);
+        Cliente cliente1 = new Cliente(1, "Guillermo", "García", "633326028", "guillermogarciaalmeida@gmail.com", "53629333A", "Guerrillero Groc de sala 11", new Date(), null);
         Cliente cliente2 = new Cliente(2, "Ana", "López", "123456789", "ana.lopez@example.com", "12345678B", "Calle Principal 123", new Date(), null);
         Cliente cliente3 = new Cliente(3, "Pedro", "Sánchez", "987654321", "pedro.sanchez@example.com", "98765432C", "Avenida Central 456", new Date(), null);
         Cliente cliente4 = new Cliente(4, "María", "Martínez", "555555555", "maria.martinez@example.com", "55555555D", "Plaza Mayor 789", new Date(), null);
@@ -209,11 +210,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Log.d("Check", "Estamos en la función del Menú");
         int id = item.getItemId();
 
+        Log.d("Check", "El id del menú es " + id);
+
         if (id == R.id.nav_clientes) {
+            Log.d("Check", "Antes de cargar los clientes");
+            fragmentListado.setClientes(clientes);
+            fragmentListado.setFacturas(facturas);
             loadFragmentListado(FragmentListado.TipoListado.SEGUN_CLIENTE, "Clientes", false);
         } else if (id == R.id.nav_facturas) {
+            Log.d("Check", "Antes de cargar las facturas");
             loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
         }else if (id == R.id.nav_facturas_borradores) {
             loadFragmentListado(FragmentListado.TipoListado.SEGUN_BORRADOR, "Borradores", false);
@@ -228,6 +236,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    //Aquí está como lo haría la IA
+    /*
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        Fragment selectedFragment = null;
+
+        if (id == R.id.nav_clientes) {
+            // Cargar el fragmento de clientes
+            selectedFragment = new FragmentClientes();
+        } else if (id == R.id.nav_facturas) {
+            // Cargar el fragmento de facturas
+            selectedFragment = new FragmentFacturas();
+        } else if (id == R.id.nav_facturas_borradores) {
+            // Cargar el fragmento de borradores de facturas
+            selectedFragment = new FragmentBorradores();
+        } else if (id == R.id.nav_facturas_pendientes_pago) {
+            // Cargar el fragmento de facturas pendientes de pago
+            selectedFragment = new FragmentPendientesPago();
+        } else if (id == R.id.nav_modificar_cliente) {
+            // Cargar el fragmento de modificación de cliente
+            selectedFragment = new FragmentModificarCliente();
+        } else if (id == R.id.nav_modificar_factura) {
+            // Cargar el fragmento de modificación de factura
+            selectedFragment = new FragmentModificarFactura();
+        }
+
+        if (selectedFragment != null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content_frame, selectedFragment);
+            transaction.commit();
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+    */
+
     public void loadFragmentListado(FragmentListado.TipoListado listado, String titulo, Boolean modificar){
         if(modificar){
             fragmentListado.setModificar(true);
@@ -240,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentListado.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentListado).commit();
             setTitle(titulo);
+            Log.d("Check", "Check1");
         }
 
     }
