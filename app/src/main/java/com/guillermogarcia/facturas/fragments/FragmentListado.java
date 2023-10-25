@@ -54,8 +54,8 @@ public class FragmentListado extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d("Check", "onCrete fragmentListado");
         super.onCreate(savedInstanceState);
+        Log.d("Check", "FragmentListado -> onCreate()");
         Bundle bundle = this.getArguments();
         if(bundle != null) {
             if(bundle.containsKey(TIPO)) {
@@ -76,9 +76,10 @@ public class FragmentListado extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvListado = view.findViewById(R.id.rvListado);
-        Log.d("Check", "En FragmentListado, antes de los if");
+        Log.d("Check", "El tipolistado es " + tipoListado);
+        if(tipoListado.equals(TipoListado.SEGUN_FACTURA)){
+        }
         if(tipoListado.equals(TipoListado.SEGUN_CLIENTE)){
-            Log.d("Check", "estamos en tipoListado.equals");
             AdaptadorClientes adaptadorClientes = new AdaptadorClientes(getActivity(), clientes);
             adaptadorClientes.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,6 +109,7 @@ public class FragmentListado extends Fragment {
 
 
     }
+
 
     public void setFacturasListener(IFacturaListener listenerFactura) {
         this.listenerFactura = listenerFactura;

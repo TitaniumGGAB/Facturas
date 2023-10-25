@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         apiService = RestClient.getInstance();
-        Log.d("Check", "Este es un mensaje de prueba");
         getClientesFacturas();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -94,16 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         clientes.add(cliente9);
         clientes.add(cliente10);
 
-
-        /*for (int i = 1; i <= 10; i++) {
-            Cliente cliente = new Cliente();
-            cliente.setNombre("Cliente " + i);
-            cliente.setApellidos("Apellidos " + i);
-            cliente.setCif("CIF " + i);
-            cliente.setDireccion("Dirección " + i);
-            clientes.add(cliente);
-        }*/
-
         facturas = new ArrayList<>();
 
         Factura factura1 = new Factura(1, "FAC001", new GregorianCalendar(2023, 8, 1), "Venta de productos", 100.0, 21.0, 121.0, new Date(), true, false, cliente1);
@@ -128,28 +117,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         facturas.add(factura9);
         facturas.add(factura10);
 
-        // Insertar facturas ficticias
-        /*
-        for (int i = 1; i <= 10; i++) {
-            Factura factura = new Factura();
-            factura.setNumeroFactura("Factura " + i);
-            // Establece otros campos de la factura aquí
-            factura.setBaseImponible(100.0 * i);
-            factura.setIvaPrecio(0.21);
-            factura.setPrecioTotal(factura.getBaseImponible() * (1 + factura.getIvaPrecio()));
-            // Asigna una fecha ficticia
-            GregorianCalendar fecha = new GregorianCalendar(2023, 8, i);
-            factura.setFecha(fecha);
-            factura.setFechaModificacion(new Date(fecha.getTimeInMillis()));
-            factura.setPagado(i % 2 == 0); // Alternar entre pagado y no pagado
-            factura.setBorrador(false);
-            factura.setCliente(clientes.get(i - 1)); // Asocia una factura a un cliente
-            facturas.add(factura);
-        }*/
 
-        // Ahora que tienes los datos ficticios, puedes establecerlos en tu FragmentListado
         fragmentListado.setClientes(clientes);
         fragmentListado.setFacturas(facturas);
+        Log.d("Check", "Antes de loadFragment() dentro de getClientesFcaturas");
         loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
 
         /*apiService.getClientes().enqueue(new Callback<List<Cliente>>() {
@@ -210,18 +181,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Log.d("Check", "Estamos en la función del Menú");
         int id = item.getItemId();
 
-        Log.d("Check", "El id del menú es " + id);
-
         if (id == R.id.nav_clientes) {
-            Log.d("Check", "Antes de cargar los clientes");
             fragmentListado.setClientes(clientes);
             fragmentListado.setFacturas(facturas);
             loadFragmentListado(FragmentListado.TipoListado.SEGUN_CLIENTE, "Clientes", false);
         } else if (id == R.id.nav_facturas) {
-            Log.d("Check", "Antes de cargar las facturas");
+            fragmentListado.setClientes(clientes);
+            fragmentListado.setFacturas(facturas);
             loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
         }else if (id == R.id.nav_facturas_borradores) {
             loadFragmentListado(FragmentListado.TipoListado.SEGUN_BORRADOR, "Borradores", false);
@@ -286,9 +254,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             bundle = new Bundle();
             bundle.putSerializable(FragmentListado.TIPO, listado);
             fragmentListado.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentListado).commit();
-            setTitle(titulo);
-            Log.d("Check", "Check1");
+
+            if(listado.equals(FragmentListado.TipoListado.SEGUN_CLIENTE)){
+                Log.d("Check", "equals Cliente");
+
+                FragmentListado fragmentListado2 = new FragmentListado();
+
+                fragmentListado2.setClientes(clientes);
+                fragmentListado2.setFacturas(facturas);
+                Bundle bundle2;
+                fragmentListado2.setFacturasListener(this);
+                fragmentListado2.setClientesListener(this);
+                bundle2 = new Bundle();
+                bundle2.putSerializable(FragmentListado.TIPO, listado);
+                fragmentListado2.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentListado2).commit();
+                setTitle(titulo);
+            }else {
+
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentListado).commit();
+                setTitle(titulo);
+            }
         }
 
     }

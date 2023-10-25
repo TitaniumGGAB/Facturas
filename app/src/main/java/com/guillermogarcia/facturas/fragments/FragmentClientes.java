@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.guillermogarcia.facturas.R;
+import com.guillermogarcia.facturas.adaptadores.AdaptadorClientes;
 import com.guillermogarcia.facturas.modelos.Cliente;
 import com.guillermogarcia.facturas.modelos.Factura;
 
@@ -25,7 +27,7 @@ import java.util.GregorianCalendar;
 
 public class FragmentClientes extends Fragment {
     private ArrayList<Cliente> listaClientes;
-
+/*
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,5 +42,5 @@ public class FragmentClientes extends Fragment {
         listViewClientes.setAdapter(adaptadorClientes);
 
         return view;
-    }
+    }*/
 }
