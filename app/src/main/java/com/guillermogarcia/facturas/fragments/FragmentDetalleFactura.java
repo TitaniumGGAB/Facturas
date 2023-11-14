@@ -58,11 +58,11 @@ public class FragmentDetalleFactura extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View inflatedView = inflater.inflate(R.layout.fragment_detalle_cliente, container, false);
+        View inflatedView = inflater.inflate(R.layout.fragment_detalle_factura, container, false);
 
         tvNumeroFactura = inflatedView.findViewById(R.id.tvNumeroFacturaDetalle);
         tvNombreApellidosCliente = inflatedView.findViewById(R.id.tvNombreApellidosClienteDeFacturaDetalle);
-        tvFecha = inflatedView.findViewById(R.id.tvFecha);
+        tvFecha = inflatedView.findViewById(R.id.tvFechaDetalle);
         tvDescripcion = inflatedView.findViewById(R.id.tvDescripcionDetalle);
         tvBaseImponible= inflatedView.findViewById(R.id.tvBaseImponibleDetalle);
         tvIva = inflatedView.findViewById(R.id.tvIvaDetalle);

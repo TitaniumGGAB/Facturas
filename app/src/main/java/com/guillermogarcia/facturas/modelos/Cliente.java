@@ -18,7 +18,7 @@ public class Cliente implements Serializable {
     private String direccion;
     private Date fecha_agregado;
 
-    private List<Factura> facturas;
+    private ArrayList<Factura> facturas;
 
 
     //El id tendrá que ser autonumérico
@@ -30,7 +30,7 @@ public class Cliente implements Serializable {
 
     }
 
-    public Cliente(int id, String nombre, String apellidos, String telefono, String email,  String cif, String direccion, Date fecha_agregado, List<Factura> facturas) {
+    public Cliente(int id, String nombre, String apellidos, String telefono, String email,  String cif, String direccion, Date fecha_agregado, ArrayList<Factura> facturas) {
         this.id = id;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -106,7 +106,7 @@ public class Cliente implements Serializable {
         this.fecha_agregado = fecha_agregado;
     }
 
-    public List<Factura> getFacturas() {
+    public ArrayList<Factura> getFacturas() {
         return facturas;
     }
 

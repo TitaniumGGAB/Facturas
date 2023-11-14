@@ -3,7 +3,6 @@ package com.guillermogarcia.facturas.modelos;
 import java.io.Serializable;
 import java.util.Date;
 //import java.sql.Date;
-import java.util.GregorianCalendar;
 /*Factura:
 id,
 cliente,
@@ -20,7 +19,7 @@ public class Factura implements Serializable, Comparable<Factura> {
 
     private int id;
     private String numeroFactura;
-    private GregorianCalendar fecha;
+    private Date fecha;
     private String descripcion;
     private double baseImponible;
     //El iva del precio y el total se tendrán que calcular automáticamente.
@@ -37,7 +36,7 @@ public class Factura implements Serializable, Comparable<Factura> {
 
     }
 
-    public Factura(int id, String numeroFactura, GregorianCalendar fecha, String descripcion, double baseImponible, double ivaPrecio, double precioTotal, Date fechaModificacion, boolean pagado, boolean borrador, Cliente cliente) {
+    public Factura(int id, String numeroFactura, Date fecha, String descripcion, double baseImponible, double ivaPrecio, double precioTotal, Date fechaModificacion, boolean pagado, boolean borrador, Cliente cliente) {
         this.id = id;
         this.numeroFactura = numeroFactura;
         this.fecha = fecha;
@@ -78,11 +77,11 @@ public class Factura implements Serializable, Comparable<Factura> {
         this.numeroFactura = numeroFactura;
     }
 
-    public GregorianCalendar getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(GregorianCalendar fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 

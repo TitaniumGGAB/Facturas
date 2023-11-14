@@ -16,7 +16,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.guillermogarcia.facturas.fragments.FragmentDetalleCliente;
 import com.guillermogarcia.facturas.fragments.FragmentDetalleFactura;
 import com.guillermogarcia.facturas.fragments.FragmentListado;
@@ -30,13 +39,10 @@ import com.guillermogarcia.facturas.modelos.Factura;
 import com.guillermogarcia.facturas.rest.RestClient;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFacturaListener, IClienteListener {
 
@@ -66,116 +72,232 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+    /*
+    public void getClientesFacturas() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        clientes = new ArrayList<>();
+        facturas = new ArrayList<>();
+
+        CollectionReference clientesRef = db.collection("Clientes");
+        CollectionReference facturasRef = db.collection("Facturas");
+
+        clientesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Cliente cliente = document.toObject(Cliente.class);
+
+                        // Ahora, en lugar de convertir directamente el campo Facturas, obtén las referencias
+                        List<DocumentReference> facturasRefs = (List<DocumentReference>) document.get("facturas");
+
+                        // Recupera los documentos de factura asociados a las referencias
+                        for (DocumentReference facturaRef : facturasRefs) {
+                            facturaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    // Convierte el documento Factura a un objeto Factura
+                                    Factura factura = documentSnapshot.toObject(Factura.class);
+
+                                    // Agrega la factura a la lista de facturas asociadas al cliente
+                                    if (cliente.getFacturas() == null) {
+                                        cliente.setFacturas(new ArrayList<>());
+                                    }
+                                    cliente.getFacturas().add(factura);
+
+                                    // Notifica que se han cargado todas las facturas asociadas al cliente
+                                    if (cliente.getFacturas().size() == facturasRefs.size()) {
+                                        clientes.add(cliente);
+                                        fragmentListado.setClientes(clientes);
+                                        cargarFacturas();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    Log.e("TAG", "Error al leer los clientes: " + task.getException());
+                }
+            }
+        });
+    }
+
+
+    public void cargarFacturas() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference facturasRef = db.collection("Facturas");
+
+        facturasRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Factura factura = document.toObject(Factura.class);
+
+                        // Ahora, en lugar de convertir directamente el campo Cliente, obtén la referencia
+                        DocumentReference clienteRef = (DocumentReference) document.get("cliente");
+
+                        // Recupera el documento Cliente asociado a la referencia
+                        clienteRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                // Convierte el documento Cliente a un objeto Cliente
+                                Cliente cliente = documentSnapshot.toObject(Cliente.class);
+
+                                // Asigna el cliente a la factura
+                                factura.setCliente(cliente);
+
+                                // Agrega la factura a la lista
+                                facturas.add(factura);
+
+                                // Notifica que se han cargado las facturas
+                                if (facturas.size() == task.getResult().size()) {
+                                    fragmentListado.setFacturas(facturas);
+                                    loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    Log.e("TAG", "Error al leer las facturas: " + task.getException());
+                }
+            }
+        });
+    }
+
+    */
+
 
     public void getClientesFacturas(){
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         clientes = new ArrayList<>();
-        //public Cliente(int id, String nombre, String apellidos, String telefono, String email,  String cif, String direccion, Date fecha_agregado, List<Factura> facturas)
-        Cliente cliente1 = new Cliente(1, "Guillermo", "García", "633326028", "guillermogarciaalmeida@gmail.com", "53629333A", "Guerrillero Groc de sala 11", new Date(), null);
-        Cliente cliente2 = new Cliente(2, "Ana", "López", "123456789", "ana.lopez@example.com", "12345678B", "Calle Principal 123", new Date(), null);
-        Cliente cliente3 = new Cliente(3, "Pedro", "Sánchez", "987654321", "pedro.sanchez@example.com", "98765432C", "Avenida Central 456", new Date(), null);
-        Cliente cliente4 = new Cliente(4, "María", "Martínez", "555555555", "maria.martinez@example.com", "55555555D", "Plaza Mayor 789", new Date(), null);
-        Cliente cliente5 = new Cliente(5, "Carlos", "Fernández", "111122223", "carlos.fernandez@example.com", "11112222E", "Paseo del Parque 567", new Date(), null);
-        Cliente cliente6 = new Cliente(6, "Sofía", "Gómez", "444488889", "sofia.gomez@example.com", "44448888F", "Callejón Secreto 234", new Date(), null);
-        Cliente cliente7 = new Cliente(7, "Luis", "Rodríguez", "777799998", "luis.rodriguez@example.com", "77779999G", "Camino de Montaña 890", new Date(), null);
-        Cliente cliente8 = new Cliente(8, "Carmen", "Pérez", "999966667", "carmen.perez@example.com", "99996666H", "Ronda del Lago 1234", new Date(), null);
-        Cliente cliente9 = new Cliente(9, "Javier", "Hernández", "333322225", "javier.hernandez@example.com", "33332222I", "Avenida Costera 4321", new Date(), null);
-        Cliente cliente10 = new Cliente(10, "Isabel", "Díaz", "666611119", "isabel.diaz@example.com", "66661111J", "Plaza del Sol 5678", new Date(), null);
-        clientes.add(cliente1);
-        clientes.add(cliente2);
-        clientes.add(cliente3);
-        clientes.add(cliente4);
-        clientes.add(cliente5);
-        clientes.add(cliente6);
-        clientes.add(cliente7);
-        clientes.add(cliente8);
-        clientes.add(cliente9);
-        clientes.add(cliente10);
-
         facturas = new ArrayList<>();
 
-        Factura factura1 = new Factura(1, "FAC001", new GregorianCalendar(2023, 8, 1), "Venta de productos", 100.0, 21.0, 121.0, new Date(), true, false, cliente1);
-        Factura factura2 = new Factura(2, "FAC002", new GregorianCalendar(2023, 8, 2), "Servicios de consultoría", 500.0, 105.0, 605.0, new Date(), false, false, cliente2);
-        Factura factura3 =  new Factura(3, "FAC003", new GregorianCalendar(2023, 8, 3), "Compra de material de oficina", 50.0, 10.5, 60.5, new Date(), true, false, cliente3);
-        Factura factura4 = new Factura(4, "FAC004", new GregorianCalendar(2023, 8, 4), "Venta de productos", 300.0, 63.0, 363.0, new Date(), false, false, cliente4);
-        Factura factura5 = new Factura(5, "FAC005", new GregorianCalendar(2023, 8, 5), "Servicios de diseño gráfico", 200.0, 42.0, 242.0, new Date(), true, false, cliente4);
-        Factura factura6 = new Factura(6, "FAC006", new GregorianCalendar(2023, 8, 6), "Compra de material de construcción", 800.0, 168.0, 968.0, new Date(), false, false, cliente4);
-        Factura factura7 = new Factura(7, "FAC007", new GregorianCalendar(2023, 8, 7), "Venta de productos", 120.0, 25.2, 145.2, new Date(), true, false, cliente1);
-        Factura factura8 = new Factura(8, "FAC008", new GregorianCalendar(2023, 8, 8), "Servicios de marketing", 350.0, 73.5, 423.5, new Date(), false, false, cliente5);
-        Factura factura9 = new Factura(9, "FAC009", new GregorianCalendar(2023, 8, 9), "Venta de productos", 75.0, 15.75, 90.75, new Date(), true, false, cliente6);
-        Factura factura10 = new Factura(10, "FAC010", new GregorianCalendar(2023, 8, 10), "Mantenimiento de equipos", 450.0, 94.5, 544.5, new Date(), false, false, cliente7);
-
-        facturas.add(factura1);
-        facturas.add(factura2);
-        facturas.add(factura3);
-        facturas.add(factura4);
-        facturas.add(factura5);
-        facturas.add(factura6);
-        facturas.add(factura7);
-        facturas.add(factura8);
-        facturas.add(factura9);
-        facturas.add(factura10);
-
-
-        fragmentListado.setClientes(clientes);
-        fragmentListado.setFacturas(facturas);
-        Log.d("Check", "Antes de loadFragment() dentro de getClientesFcaturas");
-        loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
-
-        /*apiService.getClientes().enqueue(new Callback<List<Cliente>>() {
-
-            @RequiresApi(api = Build.VERSION_CODES.O)
+        CollectionReference clientesRef = db.collection("Clientes");
+        CollectionReference facturasRef = db.collection("Facturas");
+        clientesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onResponse(Call<List<Cliente>> call, Response<List<Cliente>> response) {
-                if(response.isSuccessful()){
-                    Log.d("MainActivy", "Se han obtenido los datos");
-                    assert response.body() != null;
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Cliente cliente = new Cliente();
 
-                    clientes = (ArrayList<Cliente>) response.body();
-                    fragmentListado.setClientes(clientes);
+                        // Añadir campos uno por uno
+                        cliente.setId(document.getLong("id").intValue());
+                        cliente.setNombre(document.getString("nombre"));
+                        cliente.setApellidos(document.getString("apellidos"));
+                        cliente.setTelefono(document.getString("telefono"));
+                        cliente.setEmail(document.getString("email"));
+                        cliente.setCif(document.getString("cif"));
+                        cliente.setDireccion(document.getString("direccion"));
+                        cliente.setFecha_agregado(document.getDate("fecha_agregado"));
 
-                    for(Cliente cliente: response.body()) {
-                        Log.i(MainActivity.class.getSimpleName(), cliente.toString());
+                        // Ahora, en lugar de convertir directamente el campo Facturas, obtén las referencias
+                        List<DocumentReference> facturasRefs = (List<DocumentReference>) document.get("facturas");
+
+                        // Contador para realizar un seguimiento de cuántas facturas se han recuperado
+                        AtomicInteger count = new AtomicInteger(0);
+
+                        // Lista para almacenar las facturas asociadas al cliente
+                        ArrayList<Factura> facturasCliente = new ArrayList<>();
+
+                        // Recupera los documentos de factura asociados a las referencias
+                        for (DocumentReference facturaRef : facturasRefs) {
+                            facturaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    // Convierte el documento Factura a un objeto Factura
+                                    Factura factura = documentSnapshot.toObject(Factura.class);
+
+                                    // Añade la factura a la lista de facturas del cliente
+                                    facturasCliente.add(factura);
+
+                                    // Incrementa el contador
+                                    int currentCount = count.incrementAndGet();
+
+                                    // Si se han recuperado todas las facturas, agrega el cliente a la lista
+                                    if (currentCount == facturasRefs.size()) {
+                                        cliente.setFacturas(facturasCliente);
+                                        clientes.add(cliente);
+                                        Log.d("hola", "Comprobación");
+                                        Log.d("hola", "El tamaño de clientes es " + clientes.size() + ". El tamaño de lo recibido es " + task.getResult().size());
+                                        fragmentListado.setClientes(clientes);
+                                        cargarFacturas();
+
+                                        // Notifica que se han cargado todos los clientes con sus facturas asociadas
+                                        if (clientes.size() == task.getResult().size()) {
+                                            Log.d("hola", "Comprobación2");
+                                            fragmentListado.setClientes(clientes);
+                                            cargarFacturas();
+                                        }
+                                    }
+                                }
+                            });
+                        }
                     }
-                }else{
-                    Log.d("MainActivy", "No se ah podido obtener los datos");
+                } else {
+                    Log.e("TAG", "Error al leer los clientes: " + task.getException());
                 }
-            }
-
-            @Override
-            public void onFailure(Call<List<Cliente>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
 
-        apiService.getFacturas().enqueue(new Callback<List<Factura>>() {
+/*
+    public void getClientesFacturas(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        clientes = new ArrayList<>();
+        facturas = new ArrayList<>();
+
+        CollectionReference clientesRef = db.collection("Clientes");
+        CollectionReference facturasRef = db.collection("Facturas");
+
+        clientesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onResponse(Call<List<Factura>> call, Response<List<Factura>> response) {
-                if(response.isSuccessful()){
-                    assert response.body() != null;
-
-                        //facturas = (ArrayList<Factura>) response.body();
-                    List<Factura> facturasList = (List<Factura>) response.body();
-                    facturas = new ArrayList<Factura>(facturasList);
-
-                    fragmentListado.setFacturas(facturas);
-
-                    loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
-
-                    for(Factura factura: response.body()) {
-                        Log.i(MainActivity.class.getSimpleName(), factura.toString());
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Cliente cliente = document.toObject(Cliente.class);
+                        clientes.add(cliente);
                     }
+                    fragmentListado.setClientes(clientes);
+                    cargarFacturas();
+                } else {
+                    Log.e("TAG", "Error al leer los clientes: " + task.getException());
                 }
             }
-
-            @Override
-            public void onFailure(Call<List<Factura>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });*/
-
+        });
     }
+
+*/
+    public void cargarFacturas() {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference facturasRef = db.collection("Facturas");
+
+        facturasRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Factura factura = document.toObject(Factura.class);
+                        Log.d("hola", "Hola");
+                        facturas.add(factura);
+                    }
+                    fragmentListado.setFacturas(facturas);
+                    loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false); // Llamar a loadFragmentListado aquí
+                } else {
+                    Log.e("TAG", "Error al leer las facturas: " + task.getException());
+                }
+            }
+        });
+    }
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)

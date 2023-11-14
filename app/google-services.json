@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "997607895287",
+    "project_id": "facturas-416af",
+    "storage_bucket": "facturas-416af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997607895287:android:bbc645956443832bd463f2",
+        "android_client_info": {
+          "package_name": "com.guillermogarcia.facturas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6qAallh4gN3NevFeFc7hD7HevPJFlAjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
