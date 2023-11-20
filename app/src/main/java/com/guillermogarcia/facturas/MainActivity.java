@@ -1,5 +1,9 @@
 package com.guillermogarcia.facturas;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -9,6 +13,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,10 +22,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,12 +39,10 @@ import com.guillermogarcia.facturas.fragments.FragmentDetalleFactura;
 import com.guillermogarcia.facturas.fragments.FragmentListado;
 import com.guillermogarcia.facturas.fragments.FragmentModificarCliente;
 import com.guillermogarcia.facturas.fragments.FragmentModificarFactura;
-import com.guillermogarcia.facturas.interfaces.IAPIService;
 import com.guillermogarcia.facturas.listeners.IClienteListener;
 import com.guillermogarcia.facturas.listeners.IFacturaListener;
 import com.guillermogarcia.facturas.modelos.Cliente;
 import com.guillermogarcia.facturas.modelos.Factura;
-import com.guillermogarcia.facturas.rest.RestClient;
 
 import java.util.ArrayList;
 
@@ -46,7 +52,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFacturaListener, IClienteListener {
 
-    private IAPIService apiService;
     private DrawerLayout drawer;
     private ArrayList<Factura> facturas;
     private ArrayList<Cliente> clientes;
@@ -57,116 +62,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        apiService = RestClient.getInstance();
-        getClientesFacturas();
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null){
+            // Iniciamos Activity para Login/Registro
+            ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
 
-        drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            if (result.getResultCode() == RESULT_OK) {
+                                Toast.makeText(MainActivity.this,
+                                                "Acceso autorizado. ¡Bienvenido!",
+                                                Toast.LENGTH_LONG)
+                                        .show();
+                                getClientesFacturas();
+                            } else {
+                                Toast.makeText(MainActivity.this,
+                                                "Acceso denegado. Inténtalo de nuevo más tarde.",
+                                                Toast.LENGTH_LONG)
+                                        .show();
+                                // Close the app
+                                finish();
+                            }
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-    /*
-    public void getClientesFacturas() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            Toolbar toolbar = findViewById(R.id.toolbar);
+                            setSupportActionBar(toolbar);
 
-        clientes = new ArrayList<>();
-        facturas = new ArrayList<>();
+                            drawer = findViewById(R.id.drawer_layout);
+                            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                                    MainActivity.this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                            drawer.addDrawerListener(toggle);
+                            toggle.syncState();
 
-        CollectionReference clientesRef = db.collection("Clientes");
-        CollectionReference facturasRef = db.collection("Facturas");
-
-        clientesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Cliente cliente = document.toObject(Cliente.class);
-
-                        // Ahora, en lugar de convertir directamente el campo Facturas, obtén las referencias
-                        List<DocumentReference> facturasRefs = (List<DocumentReference>) document.get("facturas");
-
-                        // Recupera los documentos de factura asociados a las referencias
-                        for (DocumentReference facturaRef : facturasRefs) {
-                            facturaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    // Convierte el documento Factura a un objeto Factura
-                                    Factura factura = documentSnapshot.toObject(Factura.class);
-
-                                    // Agrega la factura a la lista de facturas asociadas al cliente
-                                    if (cliente.getFacturas() == null) {
-                                        cliente.setFacturas(new ArrayList<>());
-                                    }
-                                    cliente.getFacturas().add(factura);
-
-                                    // Notifica que se han cargado todas las facturas asociadas al cliente
-                                    if (cliente.getFacturas().size() == facturasRefs.size()) {
-                                        clientes.add(cliente);
-                                        fragmentListado.setClientes(clientes);
-                                        cargarFacturas();
-                                    }
-                                }
-                            });
+                            NavigationView navigationView = findViewById(R.id.nav_view);
+                            navigationView.setNavigationItemSelectedListener(MainActivity.this);
                         }
                     }
-                } else {
-                    Log.e("TAG", "Error al leer los clientes: " + task.getException());
-                }
-            }
-        });
+            );
+            activityResultLauncher.launch(AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .build());
+
+        }else {//El usuario ya se ha autenticado
+
+            Toast.makeText(this,
+                    "Bienvenido " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), Toast.LENGTH_LONG).show();
+
+            getClientesFacturas();
+
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+            drawer = findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+        }
     }
-
-
-    public void cargarFacturas() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference facturasRef = db.collection("Facturas");
-
-        facturasRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Factura factura = document.toObject(Factura.class);
-
-                        // Ahora, en lugar de convertir directamente el campo Cliente, obtén la referencia
-                        DocumentReference clienteRef = (DocumentReference) document.get("cliente");
-
-                        // Recupera el documento Cliente asociado a la referencia
-                        clienteRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                // Convierte el documento Cliente a un objeto Cliente
-                                Cliente cliente = documentSnapshot.toObject(Cliente.class);
-
-                                // Asigna el cliente a la factura
-                                factura.setCliente(cliente);
-
-                                // Agrega la factura a la lista
-                                facturas.add(factura);
-
-                                // Notifica que se han cargado las facturas
-                                if (facturas.size() == task.getResult().size()) {
-                                    fragmentListado.setFacturas(facturas);
-                                    loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
-                                }
-                            }
-                        });
-                    }
-                } else {
-                    Log.e("TAG", "Error al leer las facturas: " + task.getException());
-                }
-            }
-        });
-    }
-
-    */
 
 
     public void getClientesFacturas(){
@@ -245,35 +202,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-/*
-    public void getClientesFacturas(){
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        clientes = new ArrayList<>();
-        facturas = new ArrayList<>();
-
-        CollectionReference clientesRef = db.collection("Clientes");
-        CollectionReference facturasRef = db.collection("Facturas");
-
-        clientesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Cliente cliente = document.toObject(Cliente.class);
-                        clientes.add(cliente);
-                    }
-                    fragmentListado.setClientes(clientes);
-                    cargarFacturas();
-                } else {
-                    Log.e("TAG", "Error al leer los clientes: " + task.getException());
-                }
-            }
-        });
-    }
-
-*/
     public void cargarFacturas() {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -325,46 +253,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    //Aquí está como lo haría la IA
-    /*
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        Fragment selectedFragment = null;
-
-        if (id == R.id.nav_clientes) {
-            // Cargar el fragmento de clientes
-            selectedFragment = new FragmentClientes();
-        } else if (id == R.id.nav_facturas) {
-            // Cargar el fragmento de facturas
-            selectedFragment = new FragmentFacturas();
-        } else if (id == R.id.nav_facturas_borradores) {
-            // Cargar el fragmento de borradores de facturas
-            selectedFragment = new FragmentBorradores();
-        } else if (id == R.id.nav_facturas_pendientes_pago) {
-            // Cargar el fragmento de facturas pendientes de pago
-            selectedFragment = new FragmentPendientesPago();
-        } else if (id == R.id.nav_modificar_cliente) {
-            // Cargar el fragmento de modificación de cliente
-            selectedFragment = new FragmentModificarCliente();
-        } else if (id == R.id.nav_modificar_factura) {
-            // Cargar el fragmento de modificación de factura
-            selectedFragment = new FragmentModificarFactura();
-        }
-
-        if (selectedFragment != null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_frame, selectedFragment);
-            transaction.commit();
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-    */
 
     public void loadFragmentListado(FragmentListado.TipoListado listado, String titulo, Boolean modificar){
         if(modificar){
