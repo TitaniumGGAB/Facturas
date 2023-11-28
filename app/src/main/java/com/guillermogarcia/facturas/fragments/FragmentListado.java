@@ -16,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.guillermogarcia.facturas.R;
 import com.guillermogarcia.facturas.adaptadores.AdaptadorClientes;
+import com.guillermogarcia.facturas.adaptadores.AdaptadorClientesAux;
 import com.guillermogarcia.facturas.adaptadores.AdaptadorFacturas;
 import com.guillermogarcia.facturas.listeners.IClienteListener;
+import com.guillermogarcia.facturas.listeners.IClienteListenerAux;
 import com.guillermogarcia.facturas.listeners.IFacturaListener;
 import com.guillermogarcia.facturas.modelos.Cliente;
 import com.guillermogarcia.facturas.modelos.Factura;
@@ -27,7 +29,7 @@ import java.util.ArrayList;
 public class FragmentListado extends Fragment {
     private RecyclerView rvListado;
     private IFacturaListener listenerFactura;
-    private IClienteListener listenerCliente;
+    private IClienteListenerAux listenerCliente;
     private ArrayList<Factura> facturas;
     public enum TipoListado {
         SEGUN_CLIENTE, SEGUN_FACTURA, SEGUN_PRECIO_FACTURA,
@@ -80,7 +82,7 @@ public class FragmentListado extends Fragment {
         if(tipoListado.equals(TipoListado.SEGUN_FACTURA)){
         }
         if(tipoListado.equals(TipoListado.SEGUN_CLIENTE)){
-            AdaptadorClientes adaptadorClientes = new AdaptadorClientes(getActivity(), clientes);
+            AdaptadorClientesAux adaptadorClientes = new AdaptadorClientesAux(getActivity(), clientes);
             adaptadorClientes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -92,7 +94,7 @@ public class FragmentListado extends Fragment {
             rvListado.setAdapter(adaptadorClientes);
 
         }else{
-            AdaptadorFacturas adaptadorFacturas = new AdaptadorFacturas(getActivity(), tipoListado, facturas);
+            /*AdaptadorFacturaAux adaptadorFacturas = new AdaptadorFacturas(getActivity().this, tipoListado, facturas);
             adaptadorFacturas.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -101,7 +103,7 @@ public class FragmentListado extends Fragment {
                     }
                 }
             });
-            rvListado.setAdapter(adaptadorFacturas);
+            rvListado.setAdapter(adaptadorFacturas);*/
         }
 
         rvListado.addItemDecoration(new DividerItemDecoration(rvListado.getContext(), DividerItemDecoration.VERTICAL));
@@ -115,7 +117,7 @@ public class FragmentListado extends Fragment {
         this.listenerFactura = listenerFactura;
     }
 
-    public void setClientesListener(IClienteListener listenerCliente) {
+    public void setClientesListener(IClienteListenerAux listenerCliente) {
         this.listenerCliente = listenerCliente;
     }
 

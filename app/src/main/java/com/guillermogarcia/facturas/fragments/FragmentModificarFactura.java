@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.guillermogarcia.facturas.R;
 import com.guillermogarcia.facturas.adaptadores.AdaptadorClientes;
+import com.guillermogarcia.facturas.adaptadores.AdaptadorClientesAux;
 import com.guillermogarcia.facturas.adaptadores.AdaptadorFacturas;
 import com.guillermogarcia.facturas.modelos.Cliente;
 import com.guillermogarcia.facturas.modelos.Factura;
@@ -84,7 +85,7 @@ public class FragmentModificarFactura extends Fragment {
         editTextNumeroFactura.setHint(factura.getNumeroFactura());
         editTextDescripcion.setHint(factura.getDescripcion());
         editTextBaseImponible.setHint(String.valueOf(factura.getBaseImponible()));
-        AdaptadorClientes adaptador = new AdaptadorClientes(getActivity(), clientes);
+        AdaptadorClientesAux adaptador = new AdaptadorClientesAux(getActivity(), clientes);
         spinnerCliente.setAdapter((SpinnerAdapter) adaptador);
 
         btActualizar.setOnClickListener(new View.OnClickListener() {

@@ -1,7 +1,7 @@
 package com.guillermogarcia.facturas.listeners;
 
-import com.guillermogarcia.facturas.modelos.Factura;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public interface IFacturaListener {
-    void onFacturaSeleccionado(Factura factura);
+    void onFacturaListSelected(DocumentSnapshot documentSnapshot, int position);
 }

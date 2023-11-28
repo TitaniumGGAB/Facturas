@@ -34,32 +34,42 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.guillermogarcia.facturas.fragments.FragmentClientes;
 import com.guillermogarcia.facturas.fragments.FragmentDetalleCliente;
 import com.guillermogarcia.facturas.fragments.FragmentDetalleFactura;
+import com.guillermogarcia.facturas.fragments.FragmentFacturas;
 import com.guillermogarcia.facturas.fragments.FragmentListado;
 import com.guillermogarcia.facturas.fragments.FragmentModificarCliente;
 import com.guillermogarcia.facturas.fragments.FragmentModificarFactura;
 import com.guillermogarcia.facturas.listeners.IClienteListener;
 import com.guillermogarcia.facturas.listeners.IFacturaListener;
+import com.guillermogarcia.facturas.listeners.IFacturaListener2;
 import com.guillermogarcia.facturas.modelos.Cliente;
 import com.guillermogarcia.facturas.modelos.Factura;
 
 import java.util.ArrayList;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFacturaListener, IClienteListener {
 
-    private DrawerLayout drawer;
+    /*
     private ArrayList<Factura> facturas;
     private ArrayList<Cliente> clientes;
-    private final FragmentListado fragmentListado = new FragmentListado();
+    private final FragmentListado fragmentListado = new FragmentListado();*/
+    private DrawerLayout drawer;
+    private DocumentSnapshot documentCurrentList;
+    private CollectionReference ref;
+    private FirebaseFirestore db;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -97,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             NavigationView navigationView = findViewById(R.id.nav_view);
                             navigationView.setNavigationItemSelectedListener(MainActivity.this);
+                            Log.d("Check", "MainActivity:AonActivityResult()");
                         }
                     }
             );
@@ -122,11 +133,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             NavigationView navigationView = findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
+            Log.d("Check", "MainActivity:AOnActivityResultElse");
+
+
         }
     }
 
-
     public void getClientesFacturas(){
+        db = FirebaseFirestore.getInstance();
+        db.collection("Facturas").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        /*if(task.isSuccessful()) {
+                            if (task.getResult().size() == 0) {
+
+                            }
+                        } else {
+                            //crearDatosPrueba();
+                        }*/
+                        // Mostramos las listas.
+                        FragmentFacturas fragmentFacturas = new FragmentFacturas(MainActivity.this);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentFacturas).commit();
+                        Log.d("Check", "MainActivity:AgetClientesFacturas Despues de cargar el fragment");
+                    }
+                });
+        Log.d("Check", "MainActivity:AgetClientesFacturasFinal");
+
+    }
+
+
+    /*public void getClientesFacturas(){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -200,9 +237,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
-    }
+    }*/
 
-    public void cargarFacturas() {
+/*    public void cargarFacturas() {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference facturasRef = db.collection("Facturas");
@@ -224,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
-    }
+    }*/
 
 
 
@@ -234,27 +271,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_clientes) {
-            fragmentListado.setClientes(clientes);
-            fragmentListado.setFacturas(facturas);
-            loadFragmentListado(FragmentListado.TipoListado.SEGUN_CLIENTE, "Clientes", false);
+            Log.d("Check", "MainActivity:AonNavigationItemSelectd Clientes1");
+            //fragmentListado.setClientes(clientes);
+            //fragmentListado.setFacturas(facturas);
+            FragmentClientes f = new FragmentClientes(MainActivity.this);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).commit();
+            setTitle("Clientes");
+            Log.d("Check", "MainActivity:AonNavigationItemSelectd Clientes2");
+            //loadFragmentListado(FragmentListado.TipoListado.SEGUN_CLIENTE, "Clientes", false);
         } else if (id == R.id.nav_facturas) {
-            fragmentListado.setClientes(clientes);
-            fragmentListado.setFacturas(facturas);
-            loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
-        }else if (id == R.id.nav_facturas_borradores) {
-            loadFragmentListado(FragmentListado.TipoListado.SEGUN_BORRADOR, "Borradores", false);
-        }else if (id == R.id.nav_facturas_pendientes_pago) {
-            loadFragmentListado(FragmentListado.TipoListado.SEGUN_PENDIENTE_PAGO, "Facturas pendientes de pagar", false);
-        }else if(id == R.id.nav_modificar_factura){
-            loadFragmentListado(FragmentListado.TipoListado.SEGUN_CLIENTE, "Modificar cliente", true);
-        }else if(id == R.id.nav_modificar_cliente){
-            loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Modificar factura", true);
+            Log.d("Check", "MainActivity:AonNavigationItemSelectd Facturas1");
+            //fragmentListado.setClientes(clientes);
+            //fragmentListado.setFacturas(facturas);
+            FragmentFacturas f = new FragmentFacturas(MainActivity.this);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).commit();
+            setTitle("Facturas");
+            Log.d("Check", "MainActivity:AonNavigationItemSelectd Facturas");
+            //loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
         }
         drawer.closeDrawer(GravityCompat.START);
+        Log.d("Check", "MainActivity:AonNavigationItemSelectd Final");
         return true;
     }
 
-    public void loadFragmentListado(FragmentListado.TipoListado listado, String titulo, Boolean modificar){
+/*    public void loadFragmentListado(FragmentListado.TipoListado listado, String titulo, Boolean modificar){
         if(modificar){
             fragmentListado.setModificar(true);
         }else{
@@ -281,18 +321,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentListado2).commit();
                 setTitle(titulo);
             }else {
-
-
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentListado).commit();
                 setTitle(titulo);
             }
         }
 
-    }
+    }*/
 
 
     //habría que hacer un método así en DetalleActivity para cargar el fragmentModificarCliente/Factura
-    @Override
+/*    @Override
     public void onFacturaSeleccionado(Factura factura) {
         if(fragmentListado.isModificar()){
             FragmentModificarFactura f = new FragmentModificarFactura(clientes);
@@ -308,8 +346,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
         }
 
-    }
-
+    }*/
+/*
     @Override
     public void onClienteSeleccionado(Cliente cliente) {
         if(fragmentListado.isModificar()){
@@ -326,7 +364,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
         }
 
-    }
+    }*/
 
 
 
@@ -361,5 +399,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    @Override
+    public void onFacturaListSelected(DocumentSnapshot documentSnapshot, int position) {
+        /*Log.d("Check", "MainActivity:AonFacturas3ListSelected 1");
+        Cliente cliente = new Cliente();
+        cliente.setId(1);
+        cliente.setFacturas(null);
+        cliente.setNombre("Juan");
+        cliente.setApellidos("García");
+        cliente.setCif("53629333A");
+        cliente.setDireccion("Guerrillero groc de sala");
+        cliente.setEmail("Guillermo@gmail.coc");
+        cliente.setFecha_agregado(new Date());
+        cliente.setTelefono("633327028");
 
+
+        Factura factura = new Factura();
+        factura.setId(1);
+        factura.setNumeroFactura("E001");
+        factura.setBorrador(false);
+        factura.setBaseImponible(100);
+        factura.setDescripcion("loremp ipsun");
+        factura.setFecha(new Date());
+        factura.setFechaModificacion(new Date());
+        factura.setIvaPrecio(23);
+        factura.setPagado(true);
+        factura.setPrecioTotal(500);
+        factura.setCliente(cliente);
+
+
+
+        FragmentDetalleFactura f = new FragmentDetalleFactura();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(FragmentDetalleFactura.FACTURA_EXTRA_DETALLE, factura);
+        f.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
+        Log.d("Check", "MainActivity:AonFacturas3ListSelected 2");*/
+    }
+
+    @Override
+    public void onClienteListSelected(DocumentSnapshot documentSnapshot, int position) {
+        //FragmentClientes fragmentClientes = new FragmentClientes(this, );
+    }
 }

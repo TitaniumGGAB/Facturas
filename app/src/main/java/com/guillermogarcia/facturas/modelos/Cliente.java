@@ -1,5 +1,7 @@
 package com.guillermogarcia.facturas.modelos;
 
+import com.google.firebase.firestore.DocumentReference;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +20,7 @@ public class Cliente implements Serializable {
     private String direccion;
     private Date fecha_agregado;
 
-    private ArrayList<Factura> facturas;
+    private ArrayList<DocumentReference> facturas;
 
 
     //El id tendrá que ser autonumérico
@@ -30,7 +32,7 @@ public class Cliente implements Serializable {
 
     }
 
-    public Cliente(int id, String nombre, String apellidos, String telefono, String email,  String cif, String direccion, Date fecha_agregado, ArrayList<Factura> facturas) {
+    public Cliente(int id, String nombre, String apellidos, String telefono, String email,  String cif, String direccion, Date fecha_agregado, ArrayList<DocumentReference> facturas) {
         this.id = id;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -106,11 +108,11 @@ public class Cliente implements Serializable {
         this.fecha_agregado = fecha_agregado;
     }
 
-    public ArrayList<Factura> getFacturas() {
+    public ArrayList<DocumentReference> getFacturas() {
         return facturas;
     }
 
-    public void setFacturas(ArrayList<Factura> facturas) {
+    public void setFacturas(ArrayList<DocumentReference> facturas) {
         this.facturas = facturas;
     }
 

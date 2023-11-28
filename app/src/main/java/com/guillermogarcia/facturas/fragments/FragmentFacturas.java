@@ -1,68 +1,60 @@
 package com.guillermogarcia.facturas.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.guillermogarcia.facturas.R;
-import com.guillermogarcia.facturas.adaptadores.AdaptadorClientes;
-import com.guillermogarcia.facturas.listeners.IClienteListener;
-import com.guillermogarcia.facturas.modelos.Cliente;
+import com.guillermogarcia.facturas.adaptadores.AdaptadorFacturas;
+import com.guillermogarcia.facturas.listeners.IFacturaListener;
 import com.guillermogarcia.facturas.modelos.Factura;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+public class FragmentFacturas extends Fragment{
 
-public class FragmentClientes extends Fragment {
+    private AdaptadorFacturas adaptadorFacturas;
+    private final IFacturaListener listener;
 
-    private AdaptadorClientes adaptadorClientes;
-    private final IClienteListener listener;
-
-    public FragmentClientes(IClienteListener listener){
+    public FragmentFacturas(IFacturaListener listener){
         this.listener = listener;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_clientes, container, false);
+        View view = inflater.inflate(R.layout.fragment_facturas, container, false);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference ref = db.collection("Clientes");
-        Query query = ref.orderBy("nombre", Query.Direction.ASCENDING);
+        CollectionReference ref = db.collection("Facturas");
+        Query query = ref.orderBy("fechaModificacion", Query.Direction.ASCENDING);
 
-        FirestoreRecyclerOptions<Cliente> options = new FirestoreRecyclerOptions.Builder<Cliente>()
-                .setQuery(query, Cliente.class)
+        FirestoreRecyclerOptions<Factura> options = new FirestoreRecyclerOptions.Builder<Factura>()
+                .setQuery(query, Factura.class)
                 .build();
 
-        adaptadorClientes = new AdaptadorClientes(options, listener, getActivity());
+        adaptadorFacturas = new AdaptadorFacturas(options, listener, getActivity());
 
         RecyclerView recyclerView = view.findViewById(R.id.rvList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adaptadorClientes);
+        recyclerView.setAdapter(adaptadorFacturas);
 
         // El adaptador empieza a escuchar a la base de datos.
-        adaptadorClientes.startListening();
+        adaptadorFacturas.startListening();
 
         return view;
     }
@@ -72,18 +64,21 @@ public class FragmentClientes extends Fragment {
 
         // Cuando la app se para, el adapter parará de eschuchar a la base de datos.
         super.onStop();
-        if (adaptadorClientes != null){
-            adaptadorClientes.stopListening();
+        if (adaptadorFacturas != null){
+            adaptadorFacturas.stopListening();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        requireActivity().setTitle("Clientes");
+        requireActivity().setTitle("Facturas");
         // Cuando se reanude la app, el adaptador reanudará la eschucha a la base de datos.
-        if (adaptadorClientes != null){
-            adaptadorClientes.startListening();
+        if (adaptadorFacturas != null){
+            adaptadorFacturas.startListening();
         }
     }
+
+
+
 }

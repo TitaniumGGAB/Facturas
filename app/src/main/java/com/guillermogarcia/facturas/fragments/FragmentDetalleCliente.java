@@ -62,7 +62,7 @@ public class FragmentDetalleCliente extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View inflatedView = inflater.inflate(R.layout.fragment_detalle_cliente, container, false);
         rvListado = inflatedView.findViewById(R.id.rvListadoFacturasDelCliente);
-        AdaptadorFacturas adaptadorFacturas = new AdaptadorFacturas(getActivity(), FragmentListado.TipoListado.SEGUN_FACTURA, new ArrayList<Factura>(cliente.getFacturas()));
+        /*AdaptadorFacturas adaptadorFacturas = new AdaptadorFacturas(getActivity(), FragmentListado.TipoListado.SEGUN_FACTURA, new ArrayList<Factura>(cliente.getFacturas()));
         adaptadorFacturas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,6 +81,8 @@ public class FragmentDetalleCliente extends Fragment {
         tvNameCliente = inflatedView.findViewById(R.id.tvNameCliente);
         //tvApellidosCliente = inflatedView.findViewById(R.id.tvApellidosCliente);
         tvTelefonoCliente = inflatedView.findViewById(R.id.tvTelefonoCliente);
+
+         */
         tvEmailCliente = inflatedView.findViewById(R.id.tvEmailCliente);
         tvCifCliente = inflatedView.findViewById(R.id.tvCifCliente);
         tvDireccionCliente = inflatedView.findViewById(R.id.tvDireccionCliente);
