@@ -21,7 +21,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.guillermogarcia.facturas.R;
@@ -31,14 +30,10 @@ import java.util.List;
 
 public class FragmentModificarCliente extends Fragment {
 
-    private TextInputLayout inputNombre, inputApellidos, inputTelefono, inputEmail, inputCif, inputDireccion;
     private EditText modificarNombre, modificarApellidos, modificarTelefono, modificarEmail, modificarCif, modificarDireccion;
     private Button buttonClienteModificar, buttonClienteEliminar;
-
     private Cliente cliente;
-
     private Cliente clienteactualizar;
-
     private Context context;
 
     // Método para crear una nueva instancia del fragmento y pasar los datos del cliente como argumentos
@@ -50,7 +45,7 @@ public class FragmentModificarCliente extends Fragment {
         return fragment;
     }
 
-
+    //Necesitamos crear e inicilizar un contexto para el FragmentManager
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -62,14 +57,6 @@ public class FragmentModificarCliente extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_modificar_cliente, container, false);
 
-        // Inicializar vistas
-        inputNombre = view.findViewById(R.id.inputNombreModificar);
-        inputApellidos = view.findViewById(R.id.inputApellidosModificar);
-        inputTelefono = view.findViewById(R.id.inputTelefonoModificar);
-        inputEmail = view.findViewById(R.id.inputEmailModificar);
-        inputCif = view.findViewById(R.id.inputCifModificar);
-        inputDireccion = view.findViewById(R.id.inputDireccionModificar);
-
         modificarNombre = view.findViewById(R.id.modificarNombreCliente);
         modificarApellidos = view.findViewById(R.id.modificarApellidosCliente);
         modificarTelefono = view.findViewById(R.id.modificarTelefonoCliente);
@@ -80,7 +67,7 @@ public class FragmentModificarCliente extends Fragment {
         buttonClienteModificar = view.findViewById(R.id.buttonClienteModificar);
         buttonClienteEliminar = view.findViewById(R.id.buttonClienteEliminar);
 
-        // Obtener datos del cliente de los argumentos del fragmento
+
         Bundle bundle = getArguments();
         cliente = (Cliente) bundle.getSerializable("cliente");
         modificarNombre.setText(cliente.getNombre());
@@ -93,7 +80,6 @@ public class FragmentModificarCliente extends Fragment {
         buttonClienteModificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Obtener nuevos valores de los campos
                 String nuevoNombre = modificarNombre.getText().toString();
                 String nuevosApellidos = modificarApellidos.getText().toString();
                 String nuevoTelefono = modificarTelefono.getText().toString();
@@ -101,6 +87,8 @@ public class FragmentModificarCliente extends Fragment {
                 String nuevoCif = modificarCif.getText().toString();
                 String nuevaDireccion = modificarDireccion.getText().toString();
 
+                //inicializamos clienteactualizar y lo rellenamos con los nuevos datos
+                // para luego utilizarlo para actualizar el cliente
                 clienteactualizar = new Cliente();
 
                 clienteactualizar.setIdentificador(cliente.getIdentificador());
@@ -116,16 +104,13 @@ public class FragmentModificarCliente extends Fragment {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 CollectionReference clientesRef = db.collection("clientes");
 
-                // Obtener el identificador único del cliente
                 String idCliente = cliente.getIdentificador();  // Asegúrate de tener un método getId() en tu clase Cliente
 
-                // Actualizar los datos en la base de datos
                 clientesRef.document(idCliente).set(clienteactualizar)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                // Éxito al actualizar
-                                Toast.makeText(getContext(), "Datos del cliente actualizados", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), context.getString(R.string.datos_cliente_actualizados), Toast.LENGTH_SHORT).show();
 
                                 FragmentDetalleCliente fragmentDetalleCliente = new FragmentDetalleCliente();
                                 Bundle bundle = new Bundle();
@@ -145,7 +130,7 @@ public class FragmentModificarCliente extends Fragment {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // Error al actualizar
-                                Toast.makeText(getContext(), "Error al actualizar datos del cliente", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), context.getString(R.string.error_datos_cliente_actualizados), Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -162,22 +147,20 @@ public class FragmentModificarCliente extends Fragment {
     }
     private void mostrarDialogoConfirmacion() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Confirmar Eliminación");
-        builder.setMessage("¿Está seguro de eliminar el cliente? Las facturas asociadas al cliente también se eliminarán.");
+        builder.setTitle(context.getString(R.string.confirmar_eliminacion));
+        builder.setMessage(context.getString(R.string.seguro_eliminar_cliente));
 
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(context.getString(R.string.si), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Usuario ha confirmado eliminar el cliente
                 eliminarClienteYFacturas();
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(context.getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Usuario ha cancelado la eliminación
-                dialog.dismiss(); // Cerrar el diálogo
+                dialog.dismiss();
             }
         });
 
@@ -185,14 +168,11 @@ public class FragmentModificarCliente extends Fragment {
         dialog.show();
     }
 
-    // Método para eliminar el cliente
-
-
     private void eliminarClienteYFacturas() {
-        // Eliminar facturas asociadas
+        // Primero eliminamos las facturas asociadas
         eliminarFacturas();
 
-        // Eliminar al cliente después de haber eliminado las facturas
+        // Luego eliminamos la cliente.
         eliminarCliente();
     }
 
@@ -203,7 +183,7 @@ public class FragmentModificarCliente extends Fragment {
 
         List<String> facturasCliente = cliente.getFacturas();
 
-        // Iterar sobre las facturas del cliente y eliminar cada una
+        // Iteramos sobre las facturas del cliente y eliminar cada una
         for (String idFactura : facturasCliente) {
             facturasRef.document(idFactura).delete()
                     .addOnFailureListener(new OnFailureListener() {
@@ -221,16 +201,14 @@ public class FragmentModificarCliente extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference clientesRef = db.collection("clientes");
 
-        // Obtener el identificador único del cliente
         String idCliente = cliente.getIdentificador();
 
-        // Eliminar los datos de la base de datos
         clientesRef.document(idCliente).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         // Éxito al eliminar cliente
-                        Toast.makeText(getContext(), "Cliente y facturas asociadas eliminados", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), context.getString(R.string.cliente_facturas_eliminados), Toast.LENGTH_SHORT).show();
                         // Cerrar el fragmento después de eliminar
                         requireActivity().getSupportFragmentManager().popBackStack();
                     }
@@ -239,7 +217,7 @@ public class FragmentModificarCliente extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Error al eliminar cliente
-                        Toast.makeText(getContext(), "Error al eliminar cliente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.error_eliminar_cliente, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -2,8 +2,6 @@ package com.guillermogarcia.facturas.modelos;
 
 import android.util.Log;
 
-import com.google.firebase.firestore.DocumentReference;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,7 +13,6 @@ public class Factura implements Serializable, Comparable<Factura> {
     private Date fecha;
     private String descripcion;
     private double baseImponible;
-    //El iva del precio y el total se tendrán que calcular automáticamente.
     private double ivaPrecio;
     private double precioTotal;
     private Date fechaModificacion;
@@ -23,16 +20,12 @@ public class Factura implements Serializable, Comparable<Factura> {
     private boolean borrador;
 
     private String cliente;
-
-
-
     public Factura(){
 
     }
 
     public Factura(String identificador, String numeroFactura, Date fecha, String descripcion, double baseImponible, double ivaPrecio, double precioTotal, Date fechaModificacion, boolean pagado, boolean borrador, String cliente) {
 
-        Log.d("Factura", "Número de factura: " + numeroFactura);
         this.identificador = identificador;
         this.numeroFactura = numeroFactura;
         this.fecha = fecha;

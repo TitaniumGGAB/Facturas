@@ -27,7 +27,7 @@
         android:paddingTop="20dp"
         android:text="@string/titulo_header"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:fontFamily="cursive" />
 

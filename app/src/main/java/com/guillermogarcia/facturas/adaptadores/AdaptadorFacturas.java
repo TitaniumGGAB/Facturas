@@ -47,41 +47,34 @@ public class AdaptadorFacturas extends FirestoreRecyclerAdapter<Factura, Adaptad
         String fecha = new SimpleDateFormat("dd/MM/yyyy").format(factura.getFecha());
         facturaHolder.tvNumeroFactura.setText(factura.getNumeroFactura());
         facturaHolder.tvFecha.setText(fecha);
-
+        //Utilizamos BigDecimal para limitar el número de decimales
         BigDecimal bd = new BigDecimal(factura.getPrecioTotal());
         bd = bd.setScale (2, BigDecimal.ROUND_UP);
         Double precioTotal = bd.doubleValue ();
-        facturaHolder.tvPrecioTotal.setText("Total: " + String.valueOf(precioTotal) + "€");
+        facturaHolder.tvPrecioTotal.setText(context.getString(R.string.campo_total) + String.valueOf(precioTotal) + "€");
 
-
-        Log.d("FacturaAdapter", "Factura ID: " + factura.getIdentificador());
-        // Obtener el ID del cliente directamente del campo "cliente" de la factura
+        // Obtenemos el ID del cliente  para acceder a este en la base de datos
         String clienteId = factura.getCliente();
 
-        if (clienteId != null && !clienteId.isEmpty()) {
-            Log.d("FacturaAdapter", "Cliente ID: " + clienteId);
 
-            // Realizar una consulta directa al documento del cliente usando el ID
-            DocumentReference clienteRef = FirebaseFirestore.getInstance().collection("clientes").document(clienteId);
+        DocumentReference clienteRef = FirebaseFirestore.getInstance().collection("clientes").document(clienteId);
 
-            clienteRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (documentSnapshot.exists()) {
-                        Cliente cliente = documentSnapshot.toObject(Cliente.class);
-                        if (cliente != null) {
-                            String nombreCliente = cliente.getNombre() + " " + cliente.getApellidos();
-                            facturaHolder.tvNombreCliente.setText(nombreCliente);
-                        }
-                    } else {
-                        Log.d("Check", "AdaptadorFacturas: no existe el documento del cliente");
+        clienteRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Cliente cliente = documentSnapshot.toObject(Cliente.class);
+                    if (cliente != null) {
+                        String nombreCliente = cliente.getNombre() + " " + cliente.getApellidos();
+                        facturaHolder.tvNombreCliente.setText(nombreCliente);
                     }
+                } else {
+                    Log.e("AdaptadorFacturas", "No existe el documento del cliente " + clienteId);
                 }
-            });
-        } else {
-            Log.e("FacturaAdapter", "ID del cliente es nulo o vacío para la factura con ID: " + factura.getIdentificador());
-        }
+            }
+        });
 
+        //Dependiendo del estado de la factura ponemos un icono u otro
         if (factura.isBorrador()) {
             // Factura en borrador
             facturaHolder.icono.setImageResource(R.drawable.borrador);
@@ -109,8 +102,6 @@ public class AdaptadorFacturas extends FirestoreRecyclerAdapter<Factura, Adaptad
         TextView tvPrecioTotal;
 
         ImageView icono;
-        /*TextView tvBaseImponible;
-        TextView tvIva;*/
 
         public FacturaHolder(@NonNull View itemView) {
             super(itemView);
@@ -119,8 +110,6 @@ public class AdaptadorFacturas extends FirestoreRecyclerAdapter<Factura, Adaptad
             tvFecha = itemView.findViewById(R.id.tvFecha);
             tvPrecioTotal = itemView.findViewById(R.id.tvPrecioTotal);
             icono = itemView.findViewById(R.id.icono_estado_factura);
-            /*tvBaseImponible = itemView.findViewById(R.id.tvBaseImponible);
-            tvIva = itemView.findViewById(R.id.tvIva);*/
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -129,7 +118,6 @@ public class AdaptadorFacturas extends FirestoreRecyclerAdapter<Factura, Adaptad
                         DocumentSnapshot snapshot = getSnapshots().getSnapshot(getBindingAdapterPosition());
                         Factura facturaSeleccionada = snapshot.toObject(Factura.class);
 
-                        // Abrir el fragmento de detalles del cliente
                         abrirFragmentoDetalleFactura(facturaSeleccionada);
                     }
                 }
@@ -142,7 +130,6 @@ public class AdaptadorFacturas extends FirestoreRecyclerAdapter<Factura, Adaptad
             bundle.putSerializable("factura", factura);
             fragmentDetalleFactura.setArguments(bundle);
 
-            // Reemplazar el fragmento actual con el fragmento de detalles del cliente
             FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.content_frame, fragmentDetalleFactura);

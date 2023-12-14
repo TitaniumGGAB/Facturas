@@ -1,9 +1,6 @@
 package com.guillermogarcia.facturas.modelos;
 
-import com.google.firebase.firestore.DocumentReference;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +8,6 @@ public class Cliente implements Serializable {
 
     private String identificador;
     private String nombre;
-    //Los apellidos son opcional porque una empresa no tiene apellidos
     private String apellidos;
     private String telefono;
     private String email;
@@ -113,17 +109,8 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-       return  nombre + " " + apellidos + " " + cif;
-  /*     return "Cliente{" +
-                "identificador=" + identificador +
-                ", nombre='" + nombre + '\'' +
-                ", apellidos='" + apellidos + '\'' +
-                ", telefono='" + telefono + '\'' +
-                ", email='" + email + '\'' +
-                ", cif='" + cif + '\'' +
-                ", direccion='" + direccion + '\'' +
-                ", fecha agregado='" + fecha_agregado + '\'' +
-                ", facturas=" + facturas +
-                '}';*/
+        //El modificado el toString convencional ya que así sale
+        // mejor en el spinner de clientes que hay en modificarFacturas
+        return nombre + " " + apellidos + " " + cif;
     }
 }

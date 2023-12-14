@@ -1,11 +1,12 @@
 package com.guillermogarcia.facturas.adaptadores;
 
+import static io.grpc.internal.JsonUtil.getString;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,6 @@ import com.guillermogarcia.facturas.listeners.IClienteListener;
 import com.guillermogarcia.facturas.modelos.Cliente;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 public class AdaptadorClientes extends FirestoreRecyclerAdapter<Cliente, AdaptadorClientes.ClienteHolder> {
 
@@ -40,10 +40,10 @@ public class AdaptadorClientes extends FirestoreRecyclerAdapter<Cliente, Adaptad
     protected void onBindViewHolder(@NonNull ClienteHolder clienteHolder, int i, @NonNull Cliente cliente) {
         String fechaAgregado = new SimpleDateFormat("dd/MM/yyyy").format(cliente.getFecha_agregado());
         clienteHolder.tvNombreCliente.setText(cliente.getNombre() + " " + cliente.getApellidos());
-        clienteHolder.tvCifCliente.setText("CIF: " + cliente.getCif());
-        clienteHolder.tvFacturasAsociadas.setText("Nº Facturas: " + String.valueOf(cliente.getFacturas().size()));
-        clienteHolder.tvDireccionCliente.setText("Dirección: " + cliente.getDireccion());
-        clienteHolder.tvFechaAgregado.setText("Agregado: " + fechaAgregado);
+        clienteHolder.tvCifCliente.setText(context.getString(R.string.campo_cif) + cliente.getCif());
+        clienteHolder.tvFacturasAsociadas.setText(context.getString(R.string.campo_numero_facturas)+ String.valueOf(cliente.getFacturas().size()));
+        clienteHolder.tvDireccionCliente.setText(context.getString(R.string.campo_direccion) + cliente.getDireccion());
+        clienteHolder.tvFechaAgregado.setText(context.getString(R.string.campo_fecha_agregado) + fechaAgregado);
     }
 
     @NonNull
@@ -63,6 +63,8 @@ public class AdaptadorClientes extends FirestoreRecyclerAdapter<Cliente, Adaptad
 
         public ClienteHolder(@NonNull View itemView) {
             super(itemView);
+
+            // Inicializamos las vistas
             tvNombreCliente = itemView.findViewById(R.id.tvNameCliente);
             tvCifCliente = itemView.findViewById(R.id.tvCif);
             tvFacturasAsociadas = itemView.findViewById(R.id.tvFacturasAsociadas);

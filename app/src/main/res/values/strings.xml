@@ -1,10 +1,93 @@
 <resources>
     <string name="app_name">Invoices</string>
-    <string name="titulo_header">GESTIÓN DE FACTURAS</string>
-    <string name="navigation_drawer_open">Abrir navigation drawer</string>
-    <string name="navigation_drawer_close">Cerrar navigation drawer</string>
+    <string name="titulo_header">INVOICE MANAGEMENT</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!--AdaptadorClientes-->
+    <string name="campo_cif">CIF: </string>
+    <string name="campo_numero_facturas">Nº Invoices: </string>
+    <string name="campo_direccion">Location: </string>
+    <string name="campo_telefono">Phone: </string>
+    <string name="campo_email">Email: </string>
+    <string name="campo_fecha_agregado">Added: </string>
+    <!--AdaptadorFacturas-->
+    <string name="campo_total">Total: </string>
+    <!--FragmentAgregarCliente-->
+    <string name="faltan_rellenar_campos">Fields left to fill</string>
+    <string name="cliente_agregado_exito">Client successfully added. ID: </string>
+    <string name="error_actualizar_identificador_cliente">Error updating client identifier</string>
+    <string name="error_agregar_cliente">Error updating client</string>
+    <!--FragmentAgregarFactura-->
+    <string name="error_obtener_lista_clientes">Error getting customer list</string>
+    <string name="completa_campos_antes_agregar_factura">Complete all fields before adding the invoice</string>
+    <string name="selecciona_un_cliente">Select a client</string>
+    <string name="ingrese_valor_valido_base_imponible">Enter a valid value for the tax base</string>
+    <string name="factura_agregada_exito">"Invoice added successfully. ID: "</string>
+    <string name="error_actualizar_identificador_factura">Error updating invoice ID</string>
+    <string name="error_agregar_factura">Error adding invoice</string>
+    <string name="cliente_actualizado_nueva_factura">Client updated with new invoice</string>
+    <!--FragmentDetalleCliente-->
+    <string name="detalles_cliente">CLIENT DETAILS</string>
+    <string name="sin_facturas_asociadas">NO ASSOCIATED INVOICES</string>
+    <string name="facturas_asociadas">CLIENT ASSOCIATED INVOICES</string>
+    <string name="cliente_agregado_el">Client added on: </string>
+    <string name="confirmar_eliminacion">Confirm deletion</string>
+    <string name="seguro_eliminar_cliente">Are you sure to delete the client? Invoices associated with the customer will also be deleted.</string>
+    <string name="si">Yes </string>
+    <string name="no">No </string>
+    <string name="cliente_facturas_eliminados">Client and associated invoices deleted</string>
+    <!--FragmentDetalleFactura-->
+    <string name="campo_numero_factura">Nº Invoice: </string>
+    <string name="campo_fecha">Date: </string>
+    <string name="campo_base_imponible">"Base price: "</string>
+    <string name="campo_ultima_modificacion">Last modification: </string>
+    <string name="campo_cliente">Client: </string>
+    <string name="seguro_eliminar_factura">Are you sure to delete the invoice?</string>
+    <string name="factura_eliminada_exito">Invoice successfully deleted</string>
+    <string name="error_eliminar_factura">Error deleting invoice</string>
+    <string name="cliente_actualizado_eliminar_factura">Updated customer after deleting invoice</string>
+    <string name="error_cliente_actualizado_eliminar_factura">Error updating customer after deleting invoice</string>
+    <!--FragmentModificarCliente-->
+    <string name="datos_cliente_actualizados">Updated customer data</string>
+    <string name="error_datos_cliente_actualizados">Error updating customer data</string>
+    <string name="error_eliminar_cliente">Error deleting client</string>
+    <string name="factura_modificada_exito">Successfully modified invoice</string>
+    <string name="factura_añadida_nuevo_cliente">Invoice added to new customer</string>
+    <!--MainActivity-->
+    <string name="acceso_autorizado">Authorized access. Welcome!</string>
+    <string name="bienvenido">Welcome&#32;</string>
+    <string name="clientes">Clients </string>
+    <string name="facturas">Invoices </string>
+    <string name="agregar_cliente">Add client </string>
+    <string name="agregar_factura">Add invoice </string>
+    <string name="titulo_agregar_cliente">ADD CLIENT </string>
+    <string name="titulo_agregar_factura">ADD INVOICE </string>
+
+    <!--Layouts-->
+    <string name="nombre">Name </string>
+    <string name="apellidos">Last Name </string>
+    <string name="telefono">Phone </string>
+    <string name="direccion">Location </string>
+
+    <string name="numero_factura">Invoice number </string>
+    <string name="descripcion">Description </string>
+    <string name="base_imponible">Base price </string>
+    <string name="borrador">Draft </string>
+    <string name="pagado">Paid </string>
+
+    <string name="modificar_cliente">Modify client </string>
+    <string name="modificar_factura">Modify invoice </string>
+    <string name="eliminar_cliente">Delete client </string>
+    <string name="eliminar_factura">Delete invoice </string>
+
+    <string name="detalles_factura">INVOICE DETAILS</string>
+    <string name="titulo_modificar_cliente">MODIFY CLIENT </string>
+    <string name="titulo_modificar_factura">MODIFY INVOICE </string>
+    <string name="titulo_descripción">DESCRIPTION:</string>
+
+
 </resources>

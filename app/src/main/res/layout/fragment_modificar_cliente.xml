@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:fontFamily="sans-serif-light"
-        android:text="MODIFICAR CLIENTE"
+        android:text="@string/titulo_modificar_cliente"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:hint="Nombre"
+            android:hint="@string/nombre"
             tools:layout_editor_absoluteX="0dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:hint="Apellidos"
+            android:hint="@string/apellidos"
             tools:layout_editor_absoluteX="0dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -82,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:hint="Telefono"
+            android:hint="@string/telefono"
             android:inputType="number"
             tools:layout_editor_absoluteX="0dp" />
 
@@ -147,7 +147,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:hint="Dirección"
+            android:hint="@string/direccion"
             tools:layout_editor_absoluteX="0dp" />
 
 
@@ -162,7 +162,7 @@
             android:background="#87CEEB"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:text="Modificar  Cliente"
+            android:text="@string/modificar_cliente"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
 
@@ -178,7 +178,7 @@
             android:background="#FF6666"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:text="Eliminar  Cliente"
+            android:text="@string/eliminar_cliente"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"

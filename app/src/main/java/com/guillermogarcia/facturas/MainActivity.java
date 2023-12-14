@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,27 +23,18 @@ import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.guillermogarcia.facturas.fragments.FragmentAgregarCliente;
 import com.guillermogarcia.facturas.fragments.FragmentAgregarFactura;
 import com.guillermogarcia.facturas.fragments.FragmentClientes;
-import com.guillermogarcia.facturas.fragments.FragmentDetalleCliente;
-import com.guillermogarcia.facturas.fragments.FragmentDetalleFactura;
 import com.guillermogarcia.facturas.fragments.FragmentFacturas;
-import com.guillermogarcia.facturas.fragments.FragmentModificarCliente;
 import com.guillermogarcia.facturas.listeners.IClienteListener;
 import com.guillermogarcia.facturas.listeners.IFacturaListener;
-
-
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFacturaListener, IClienteListener {
 
@@ -67,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         public void onActivityResult(ActivityResult result) {
                             if (result.getResultCode() == RESULT_OK) {
                                 Toast.makeText(MainActivity.this,
-                                                "Acceso autorizado. ¡Bienvenido!",
+                                                MainActivity.this.getString(R.string.acceso_autorizado),
                                                 Toast.LENGTH_LONG)
                                         .show();
                                 getClientesFacturas();
@@ -102,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }else {//El usuario ya se ha autenticado
 
             Toast.makeText(this,
-                    "Bienvenido " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), Toast.LENGTH_LONG).show();
+                    MainActivity.this.getString(R.string.bienvenido) + FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), Toast.LENGTH_LONG).show();
 
             getClientesFacturas();
 
@@ -150,35 +142,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d("Check", "MainActivity:AonNavigationItemSelectd Clientes1");
             FragmentClientes f = new FragmentClientes(MainActivity.this);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).commit();
-            setTitle("Clientes");
+            setTitle(MainActivity.this.getString(R.string.clientes));
             Log.d("Check", "MainActivity:AonNavigationItemSelectd Clientes2");
-            //loadFragmentListado(FragmentListado.TipoListado.SEGUN_CLIENTE, "Clientes", false);
         } else if (id == R.id.nav_facturas) {
             Log.d("Check", "MainActivity:AonNavigationItemSelectd Facturas1");
-            //fragmentListado.setClientes(clientes);
-            //fragmentListado.setFacturas(facturas);
             FragmentFacturas f = new FragmentFacturas(MainActivity.this);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).commit();
-            setTitle("Facturas");
+            setTitle(MainActivity.this.getString(R.string.facturas));
             Log.d("Check", "MainActivity:AonNavigationItemSelectd Facturas");
-            //loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
         }else if (id == R.id.nav_agregar_cliente) {
             Log.d("Check", "MainActivity:AonNavigationItemSelectd Agregar Cliente");
-            //fragmentListado.setClientes(clientes);
-            //fragmentListado.setFacturas(facturas);
             FragmentAgregarCliente f = new FragmentAgregarCliente();
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).commit();
-            setTitle("Agregar cliente");
+            setTitle(MainActivity.this.getString(R.string.agregar_cliente));
             Log.d("Check", "MainActivity:AonNavigationItemSelectd Agregra Cliente ");
-            //loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
         }
         else if (id == R.id.nav_agregar_factura) {
             Log.d("Check", "MainActivity:AonNavigationItemSelectd Agregar Factura");
             FragmentAgregarFactura f = new FragmentAgregarFactura();
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).commit();
-            setTitle("Agregar factura");
+            setTitle(MainActivity.this.getString(R.string.agregar_factura));
             Log.d("Check", "MainActivity:AonNavigationItemSelectd Agregra Factura ");
-            //loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
         }
         drawer.closeDrawer(GravityCompat.START);
         Log.d("Check", "MainActivity:AonNavigationItemSelectd Final");
@@ -226,6 +210,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onClienteListSelected(DocumentSnapshot documentSnapshot, int position) {
-        //FragmentClientes fragmentClientes = new FragmentClientes(this, );
     }
 }

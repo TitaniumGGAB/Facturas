@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -31,16 +29,14 @@ import com.guillermogarcia.facturas.listeners.IFacturaListener;
 import com.guillermogarcia.facturas.modelos.Cliente;
 import com.guillermogarcia.facturas.modelos.Factura;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
 
 public class FragmentDetalleFactura extends Fragment implements IFacturaListener {
 
     private Factura factura;
-
     private String idFacturaModificar;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     private TextView
             tvNumeroFactura,
             tvNombreApellidosCliente,
@@ -54,14 +50,23 @@ public class FragmentDetalleFactura extends Fragment implements IFacturaListener
     private Switch switchBorrador, switchPagado;
     private Button btModificar, btEliminar;
 
+    private Context context;
+
     public FragmentDetalleFactura() {
+    }
+
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View inflatedView = inflater.inflate(R.layout.fragment_detalle_factura, container, false);
-
 
         tvNumeroFactura = inflatedView.findViewById(R.id.tvNumeroFacturaDetalle);
         tvNombreApellidosCliente = inflatedView.findViewById(R.id.tvNombreApellidosClienteDeFacturaDetalle);
@@ -86,18 +91,21 @@ public class FragmentDetalleFactura extends Fragment implements IFacturaListener
         String fecha = new SimpleDateFormat("dd/MM/yyyy").format(factura.getFecha());
         String fechaModificacion = new SimpleDateFormat("dd/MM/yyyy").format(factura.getFechaModificacion());
 
-        tvNumeroFactura.setText("Nº Factura: " + factura.getNumeroFactura());
-        tvFecha.setText("Fecha: " + fecha);
+        tvNumeroFactura.setText(context.getString(R.string.campo_numero_factura) + factura.getNumeroFactura());
+        tvFecha.setText(context.getString(R.string.campo_fecha) + fecha);
         tvDescripcion.setGravity(Gravity.CENTER);
         tvDescripcion.setText(factura.getDescripcion());
-        tvBaseImponible.setText(String.valueOf("Base imponible: " + factura.getBaseImponible() + "€"));
-        tvIva.setText(String.valueOf("IVA: " + factura.getIvaPrecio()) + "€");
+        tvBaseImponible.setText(String.valueOf(context.getString(R.string.campo_base_imponible) + factura.getBaseImponible() + "€"));
+        BigDecimal bd = new BigDecimal(factura.getIvaPrecio());
+        bd = bd.setScale (2, BigDecimal.ROUND_UP);
+        Double ivaPrecio = bd.doubleValue ();
+        tvIva.setText(String.valueOf("IVA: " + ivaPrecio + "€"));
         tvPrecioTotal.setText("Total: " + String.valueOf(factura.getPrecioTotal()) + "€");
         switchBorrador.setChecked(factura.isBorrador());
         switchPagado.setChecked(factura.isPagado());
-        tvFechaModificacion.setText("Última modificación: " + fechaModificacion);
+        tvFechaModificacion.setText(context.getString(R.string.campo_ultima_modificacion) + fechaModificacion);
 
-
+        //Mediante el id del cliente conseguimos acceder a su documento en la nube y obtener el nombre y apellidos
         String clienteId = factura.getCliente();
         if (clienteId != null && !clienteId.isEmpty()) {
             DocumentReference clienteRef = FirebaseFirestore.getInstance().collection("clientes").document(clienteId);
@@ -108,7 +116,7 @@ public class FragmentDetalleFactura extends Fragment implements IFacturaListener
                         Cliente cliente = documentSnapshot.toObject(Cliente.class);
                         if (cliente != null) {
                             String nombreApellidosCliente = cliente.getNombre() + " " + cliente.getApellidos();
-                            tvNombreApellidosCliente.setText("Cliente: " + nombreApellidosCliente);
+                            tvNombreApellidosCliente.setText(context.getString(R.string.campo_cliente) + nombreApellidosCliente);
                         }
                     }
                 }
@@ -118,14 +126,11 @@ public class FragmentDetalleFactura extends Fragment implements IFacturaListener
         btModificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Crear una instancia del FragmentModificarFactura y pasar la factura como argumento
-                FragmentModificarFactura fragmentModificarFactura = FragmentModificarFactura.newInstance(factura);
 
-                // Obtener el FragmentManager y comenzar la transacción
+                FragmentModificarFactura fragmentModificarFactura = FragmentModificarFactura.newInstance(factura);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                // Reemplazar el FragmentDetalleFactura con el FragmentModificarFactura
                 fragmentTransaction.replace(R.id.content_frame, fragmentModificarFactura);
                 fragmentTransaction.addToBackStack(null);  // Permite volver al fragmento anterior con el botón de retroceso
                 fragmentTransaction.commit();
@@ -152,17 +157,17 @@ public class FragmentDetalleFactura extends Fragment implements IFacturaListener
     private void mostrarDialogoConfirmacion() {
         // Crear y mostrar un diálogo de confirmación
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setMessage("¿Está seguro de eliminar la factura?")
-                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+        builder.setMessage(context.getString(R.string.seguro_eliminar_factura))
+                .setPositiveButton(context.getString(R.string.si), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         eliminarFactura();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(context.getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // No hacer nada si el usuario elige "No"
+                        // No hacemos nada si el usuario elige "No"
                     }
                 })
                 .show();
@@ -172,13 +177,13 @@ public class FragmentDetalleFactura extends Fragment implements IFacturaListener
 
         Context context = getContext();
 
-        // Eliminar la factura de la base de datos
+        // Eliminamos la factura de la base de datos
         db.collection("Facturas")
                 .document(idFacturaModificar)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(context, "Factura eliminada con éxito", Toast.LENGTH_SHORT).show();
-                    // Eliminar la factura de la lista de facturas asociadas al cliente
+                    Toast.makeText(context, context.getString(R.string.factura_eliminada_exito), Toast.LENGTH_SHORT).show();
+                    // Eliminamos la factura de la lista de facturas asociadas al cliente
                     eliminarFacturaDeCliente();
                     FragmentFacturas f = new FragmentFacturas(this);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -188,15 +193,13 @@ public class FragmentDetalleFactura extends Fragment implements IFacturaListener
                     Log.d("Check", "MainActivity:AonNavigationItemSelectd Facturas");
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Error al eliminar factura", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.error_eliminar_factura), Toast.LENGTH_SHORT).show();
                 });
     }
     private void eliminarFacturaDeCliente() {
         Context context = getContext();
-        // Obtener el cliente seleccionado en el Spinner
         DocumentReference clienteRef = db.collection("clientes").document(factura.getCliente());
 
-        // Obtener el cliente por su identificador
         clienteRef.get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -210,17 +213,13 @@ public class FragmentDetalleFactura extends Fragment implements IFacturaListener
                                     .document(cliente.getIdentificador())
                                     .update("facturas", cliente.getFacturas())
                                     .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(context, "Cliente actualizado después de eliminar factura", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, context.getString(R.string.cliente_actualizado_eliminar_factura), Toast.LENGTH_SHORT).show();
                                     })
                                     .addOnFailureListener(e -> {
-                                        Toast.makeText(context, "Error al actualizar el cliente después de eliminar factura", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, context.getString(R.string.error_cliente_actualizado_eliminar_factura), Toast.LENGTH_SHORT).show();
                                     });
                         }
                     }
-                })
-                .addOnFailureListener(e -> {
-                    // Manejar cualquier error en la obtención de datos desde Firestore
-                    // ...
                 });
 
     }

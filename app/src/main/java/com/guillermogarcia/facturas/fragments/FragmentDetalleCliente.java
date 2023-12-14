@@ -1,6 +1,7 @@
 package com.guillermogarcia.facturas.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +29,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.guillermogarcia.facturas.R;
 import com.guillermogarcia.facturas.adaptadores.AdaptadorFacturas;
-import com.guillermogarcia.facturas.adaptadores.AdaptadorFacturasDetalle;
 import com.guillermogarcia.facturas.listeners.IFacturaListener;
 import com.guillermogarcia.facturas.modelos.Cliente;
 import com.guillermogarcia.facturas.modelos.Factura;
@@ -43,9 +43,17 @@ public class FragmentDetalleCliente extends Fragment implements IFacturaListener
     private TextView tvNombreApellidos, tvCif, tvDireccion, tvTelefono, tvEmail, tvFechaAgregado, tvFacturasAsociadas;
     private Button btnModificar, btnEliminar;
     private RecyclerView rvListadoFacturasDelClienteDetalle;
-    private AdaptadorFacturasDetalle adaptadorFacturas;
+    private AdaptadorFacturas adaptadorFacturas;
 
     private Cliente cliente;
+
+    private Context context;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
 
     @Nullable
@@ -53,7 +61,6 @@ public class FragmentDetalleCliente extends Fragment implements IFacturaListener
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detalle_cliente, container, false);
 
-        // Inicializar las vistas
         tvNombreApellidos = view.findViewById(R.id.tvNombreApellidosClienteDetalle);
         tvCif = view.findViewById(R.id.tvCifClienteDetalle);
         tvDireccion = view.findViewById(R.id.tvDireccionClienteDetalle);
@@ -64,7 +71,7 @@ public class FragmentDetalleCliente extends Fragment implements IFacturaListener
         btnEliminar = view.findViewById(R.id.buttonEliminarClienteDetalle);
         tvFacturasAsociadas = view.findViewById(R.id.textViewFacturasAsociadas);
 
-        // Obtener datos del cliente de los argumentos del fragmento
+        // Obtenemos los datos del cliente de los argumentos del fragmento
         Bundle bundle = getArguments();
         if (bundle != null) {
             cliente = (Cliente) bundle.getSerializable("cliente");
@@ -81,22 +88,20 @@ public class FragmentDetalleCliente extends Fragment implements IFacturaListener
                         .build();
 
 
-                adaptadorFacturas = new AdaptadorFacturasDetalle(options, this, getContext());
+                adaptadorFacturas = new AdaptadorFacturas(options, this, getContext());
                 rvListadoFacturasDelClienteDetalle.setLayoutManager(new LinearLayoutManager(getContext()));
                 rvListadoFacturasDelClienteDetalle.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
                 rvListadoFacturasDelClienteDetalle.setAdapter(adaptadorFacturas);
-                //cargarFacturasDelCliente(cliente.getFacturas());
                 adaptadorFacturas.startListening();
 
-
             }else{
-                tvFacturasAsociadas.setText("SIN FACTURAS ASOCIADAS");
+                tvFacturasAsociadas.setText(context.getString(R.string.sin_facturas_asociadas));
             }
 
             btnModificar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Abrir el FragmentModificarCliente con los datos del cliente
+                    // Abrimos el FragmentModificarCliente con los datos del cliente
                     FragmentModificarCliente fragmentModificarCliente = FragmentModificarCliente.newInstance(cliente);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.content_frame, fragmentModificarCliente);
@@ -112,8 +117,6 @@ public class FragmentDetalleCliente extends Fragment implements IFacturaListener
                 }
             });
 
-        }else{
-            tvFacturasAsociadas.setText("SIN FACTURAS ASOCIADAS");
         }
 
 
@@ -125,23 +128,23 @@ public class FragmentDetalleCliente extends Fragment implements IFacturaListener
     private void mostrarDetallesCliente(Cliente cliente) {
         if (cliente != null) {
             tvNombreApellidos.setText(cliente.getNombre() + " " + cliente.getApellidos());
-            tvCif.setText("CIF: " + cliente.getCif());
-            tvDireccion.setText("Dirección: " + cliente.getDireccion());
-            tvTelefono.setText("Teléfono: " + cliente.getTelefono());
-            tvEmail.setText("Email: " + cliente.getEmail());
+            tvCif.setText(context.getString(R.string.campo_cif) + cliente.getCif());
+            tvDireccion.setText(context.getString(R.string.campo_direccion) + cliente.getDireccion());
+            tvTelefono.setText(context.getString(R.string.campo_telefono) + cliente.getTelefono());
+            tvEmail.setText(context.getString(R.string.campo_email) + cliente.getEmail());
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             String fechaAgregado = dateFormat.format(cliente.getFecha_agregado());
-            tvFechaAgregado.setText("Cliente agregado el: " + fechaAgregado);
+            tvFechaAgregado.setText(context.getString(R.string.cliente_agregado_el) + fechaAgregado);
         }
     }
 
 
     private void mostrarDialogoConfirmacion() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Confirmar Eliminación");
-        builder.setMessage("¿Está seguro de eliminar el cliente? Las facturas asociadas al cliente también se eliminarán.");
+        builder.setTitle(context.getString(R.string.confirmar_eliminacion));
+        builder.setMessage(context.getString(R.string.seguro_eliminar_cliente));
 
-        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(context.getString(R.string.si), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Usuario ha confirmado eliminar el cliente
@@ -149,7 +152,7 @@ public class FragmentDetalleCliente extends Fragment implements IFacturaListener
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(context.getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Usuario ha cancelado la eliminación
@@ -206,7 +209,7 @@ public class FragmentDetalleCliente extends Fragment implements IFacturaListener
                     @Override
                     public void onSuccess(Void aVoid) {
                         // Éxito al eliminar cliente
-                        Toast.makeText(getContext(), "Cliente y facturas asociadas eliminados", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.cliente_facturas_eliminados, Toast.LENGTH_SHORT).show();
                         // Cerrar el fragmento después de eliminar
                         requireActivity().getSupportFragmentManager().popBackStack();
                     }

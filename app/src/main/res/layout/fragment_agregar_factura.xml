@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:fontFamily="sans-serif-light"
-        android:text="AGREGAR FACTURA"
+        android:text="@string/titulo_agregar_factura"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:hint="Número de factura"
+            android:hint="@string/numero_factura"
             tools:layout_editor_absoluteX="0dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:hint="Descripcón"
+            android:hint="@string/descripcion"
             tools:layout_editor_absoluteX="0dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -81,7 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:hint="Base imponible"
+            android:hint="@string/base_imponible"
             android:inputType="textEmailAddress"
             tools:layout_editor_absoluteX="0dp" />
 
@@ -129,7 +129,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:checked="false"
-        android:text="Borrador"
+        android:text="@string/borrador"
         app:layout_constraintEnd_toStartOf="@+id/switchPagadoAgregar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/datePicker" />
@@ -140,7 +140,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:checked="false"
-        android:text="Pagado"
+        android:text="@string/pagado"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.775"
         app:layout_constraintStart_toStartOf="parent"
@@ -153,7 +153,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="128dp"
         android:fontFamily="sans-serif-light"
-        android:text="Seleccione un cliente"
+        android:text="@string/selecciona_un_cliente"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -178,7 +178,7 @@
         android:background="#87CEEB"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:text="Agregar  Factura"
+        android:text="@string/agregar_factura"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

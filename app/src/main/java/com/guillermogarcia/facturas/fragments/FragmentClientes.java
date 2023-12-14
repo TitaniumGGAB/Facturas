@@ -1,21 +1,15 @@
 package com.guillermogarcia.facturas.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,19 +21,23 @@ import com.guillermogarcia.facturas.R;
 import com.guillermogarcia.facturas.adaptadores.AdaptadorClientes;
 import com.guillermogarcia.facturas.listeners.IClienteListener;
 import com.guillermogarcia.facturas.modelos.Cliente;
-import com.guillermogarcia.facturas.modelos.Factura;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 public class FragmentClientes extends Fragment {
 
     private AdaptadorClientes adaptadorClientes;
     private final IClienteListener listener;
 
+    private Context context;
+
     public FragmentClientes(IClienteListener listener){
         this.listener = listener;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Nullable
@@ -80,7 +78,7 @@ public class FragmentClientes extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        requireActivity().setTitle("Clientes");
+        requireActivity().setTitle(context.getString(R.string.clientes));
         // Cuando se reanude la app, el adaptador reanudará la eschucha a la base de datos.
         if (adaptadorClientes != null){
             adaptadorClientes.startListening();
