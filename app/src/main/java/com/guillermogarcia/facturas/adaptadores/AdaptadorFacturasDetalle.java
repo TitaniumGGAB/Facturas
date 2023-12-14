@@ -1,7 +1,6 @@
 package com.guillermogarcia.facturas.adaptadores;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -22,7 +18,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.guillermogarcia.facturas.R;
-import com.guillermogarcia.facturas.fragments.FragmentDetalleFactura;
 import com.guillermogarcia.facturas.listeners.IFacturaListener;
 import com.guillermogarcia.facturas.modelos.Cliente;
 import com.guillermogarcia.facturas.modelos.Factura;
@@ -30,36 +25,35 @@ import com.guillermogarcia.facturas.modelos.Factura;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
-public class AdaptadorFacturas extends FirestoreRecyclerAdapter<Factura, AdaptadorFacturas.FacturaHolder> {
+public class AdaptadorFacturasDetalle extends FirestoreRecyclerAdapter<Factura, AdaptadorFacturasDetalle.FacturaHolder> {
 
     private final IFacturaListener listener;
     private final Context context;
 
-    public AdaptadorFacturas(@NonNull FirestoreRecyclerOptions<Factura> options, IFacturaListener listener, Context context) {
+    public AdaptadorFacturasDetalle(@NonNull FirestoreRecyclerOptions<Factura> options, IFacturaListener listener, Context context) {
         super(options);
         this.context = context;
         this.listener = listener;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull FacturaHolder facturaHolder, int i, @NonNull Factura factura) {
+    protected void onBindViewHolder(@NonNull FacturaHolder holder, int position, @NonNull Factura factura) {
 
         String fecha = new SimpleDateFormat("dd/MM/yyyy").format(factura.getFecha());
-        facturaHolder.tvNumeroFactura.setText(factura.getNumeroFactura());
-        facturaHolder.tvFecha.setText(fecha);
+        holder.tvNumeroFactura.setText(factura.getNumeroFactura());
+        holder.tvFecha.setText(fecha); // Ajusta la forma de mostrar la fecha según tus necesidades
 
         BigDecimal bd = new BigDecimal(factura.getPrecioTotal());
         bd = bd.setScale (2, BigDecimal.ROUND_UP);
         Double precioTotal = bd.doubleValue ();
-        facturaHolder.tvPrecioTotal.setText("Total: " + String.valueOf(precioTotal) + "€");
+        holder.tvPrecioTotal.setText("Total: " + String.valueOf(precioTotal) + "€");
+        /*holder.tvBaseImponible.setText(String.valueOf(factura.getBaseImponible()));
+        holder.tvIva.setText(String.valueOf(factura.getIvaPrecio()));*/
 
-
-        Log.d("FacturaAdapter", "Factura ID: " + factura.getIdentificador());
-        // Obtener el ID del cliente directamente del campo "cliente" de la factura
         String clienteId = factura.getCliente();
-
+        Log.d("FacturaAdapterDetalle", "LLegamos");
         if (clienteId != null && !clienteId.isEmpty()) {
-            Log.d("FacturaAdapter", "Cliente ID: " + clienteId);
+            Log.d("FacturaAdapterDetalle", "Cliente ID: " + clienteId);
 
             // Realizar una consulta directa al documento del cliente usando el ID
             DocumentReference clienteRef = FirebaseFirestore.getInstance().collection("clientes").document(clienteId);
@@ -71,26 +65,26 @@ public class AdaptadorFacturas extends FirestoreRecyclerAdapter<Factura, Adaptad
                         Cliente cliente = documentSnapshot.toObject(Cliente.class);
                         if (cliente != null) {
                             String nombreCliente = cliente.getNombre() + " " + cliente.getApellidos();
-                            facturaHolder.tvNombreCliente.setText(nombreCliente);
+                            holder.tvNombreCliente.setText(nombreCliente);
                         }
                     } else {
-                        Log.d("Check", "AdaptadorFacturas: no existe el documento del cliente");
+                        Log.d("FacturaAdapterDetalle", "AdaptadorFacturasDetalle: no existe el documento del cliente");
                     }
                 }
             });
         } else {
-            Log.e("FacturaAdapter", "ID del cliente es nulo o vacío para la factura con ID: " + factura.getIdentificador());
+            Log.e("FacturaAdapterDetalle", "ID del cliente es nulo o vacío para la factura con ID: " + factura.getIdentificador());
         }
 
         if (factura.isBorrador()) {
             // Factura en borrador
-            facturaHolder.icono.setImageResource(R.drawable.borrador);
+            holder.icono.setImageResource(R.drawable.borrador);
         } else if (factura.isPagado()) {
             // Factura pagada
-            facturaHolder.icono.setImageResource(R.drawable.pagado);
+            holder.icono.setImageResource(R.drawable.pagado);
         } else {
             // Factura pendiente
-            facturaHolder.icono.setImageResource(R.drawable.pendiente);
+            holder.icono.setImageResource(R.drawable.pendiente);
         }
 
     }
@@ -98,19 +92,20 @@ public class AdaptadorFacturas extends FirestoreRecyclerAdapter<Factura, Adaptad
     @NonNull
     @Override
     public FacturaHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_listado_factura, parent, false);
-        return new FacturaHolder(v);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_listado_factura, parent, false);
+        return new FacturaHolder(view);
     }
 
     class FacturaHolder extends RecyclerView.ViewHolder {
-        TextView tvNumeroFactura;
-        TextView tvNombreCliente;
-        TextView tvFecha;
-        TextView tvPrecioTotal;
+
+        private final TextView tvNumeroFactura;
+        private final TextView tvNombreCliente;
+        private final TextView tvFecha;
+        private final TextView tvPrecioTotal;
 
         ImageView icono;
-        /*TextView tvBaseImponible;
-        TextView tvIva;*/
+        /*private final TextView tvBaseImponible;
+        private final TextView tvIva;*/
 
         public FacturaHolder(@NonNull View itemView) {
             super(itemView);
@@ -124,38 +119,14 @@ public class AdaptadorFacturas extends FirestoreRecyclerAdapter<Factura, Adaptad
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     if(getBindingAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
-                        DocumentSnapshot snapshot = getSnapshots().getSnapshot(getBindingAdapterPosition());
-                        Factura facturaSeleccionada = snapshot.toObject(Factura.class);
-
-                        // Abrir el fragmento de detalles del cliente
-                        abrirFragmentoDetalleFactura(facturaSeleccionada);
+                        listener.onFacturaListSelected(getSnapshots().getSnapshot(getBindingAdapterPosition()), getBindingAdapterPosition());
                     }
                 }
             });
-
         }
-        private void abrirFragmentoDetalleFactura(Factura factura) {
-            FragmentDetalleFactura fragmentDetalleFactura = new FragmentDetalleFactura();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("factura", factura);
-            fragmentDetalleFactura.setArguments(bundle);
 
-            // Reemplazar el fragmento actual con el fragmento de detalles del cliente
-            FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.content_frame, fragmentDetalleFactura);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
+
     }
 }
-
-
-
-
-
-
-
-

@@ -48,7 +48,7 @@ public class FragmentClientes extends Fragment {
         View view = inflater.inflate(R.layout.fragment_clientes, container, false);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference ref = db.collection("Clientes");
+        CollectionReference ref = db.collection("clientes");
         Query query = ref.orderBy("nombre", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<Cliente> options = new FirestoreRecyclerOptions.Builder<Cliente>()

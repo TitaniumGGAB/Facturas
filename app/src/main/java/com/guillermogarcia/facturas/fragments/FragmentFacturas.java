@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.guillermogarcia.facturas.R;
@@ -41,15 +42,24 @@ public class FragmentFacturas extends Fragment{
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference ref = db.collection("Facturas");
-        Query query = ref.orderBy("fechaModificacion", Query.Direction.ASCENDING);
+        Query query = ref.orderBy("fechaModificacion", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<Factura> options = new FirestoreRecyclerOptions.Builder<Factura>()
                 .setQuery(query, Factura.class)
                 .build();
 
+        if (options.getSnapshots().isEmpty()) {
+            Log.d("FragmentDetalleCliente", "FirestoreRecyclerOptions de Facturas está vacío. No hay datos para mostrar.");
+            // Puedes mostrar un mensaje de que no hay datos o realizar alguna otra acción según tus necesidades.
+        }else{
+            Log.d("FragmentDetalleCliente", "FirestoreRecyclerOptions de Facturas está rellenado. Si hay datos para mostrar.");
+        }
+
+
         adaptadorFacturas = new AdaptadorFacturas(options, listener, getActivity());
 
         RecyclerView recyclerView = view.findViewById(R.id.rvList);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adaptadorFacturas);
 

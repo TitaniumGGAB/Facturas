@@ -1,130 +1,163 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- He decidido poner una lista detalle de autor y categoria por separado
-porque por ejemplo si pinchamos en un autor no necesitamos que todas las frases ponga el autor-->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="match_parent"
+    tools:ignore="UseSwitchCompatOrMaterialXml">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UseSwitchCompatOrMaterialXml">
 
     <TextView
-        android:id="@+id/tvNameCliente"
+        android:id="@+id/tvText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="44dp"
         android:foregroundGravity="center_vertical|center|center_horizontal"
         android:gravity="center|center_horizontal|center_vertical"
-        android:text="NombreCliente"
+        android:text="DETALLES CLIENTE"
+        android:fontFamily="serif-bold"
+
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.138"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
-        android:id="@+id/tvCifCliente"
+        android:id="@+id/tvNombreApellidosClienteDetalle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="120dp"
         android:foregroundGravity="center_vertical|center|center_horizontal"
         android:gravity="center|center_horizontal|center_vertical"
-        android:text="CIF"
+        android:text="Nombre y apellidos Cliente"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNameCliente" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tvCifClienteDetalle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:foregroundGravity="center_vertical|center|center_horizontal"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:text="CIF: 53629333A"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvNombreApellidosClienteDetalle" />
 
-    <TextView
-        android:id="@+id/tvDireccionCliente"
+        <TextView
+        android:id="@+id/tvDireccionClienteDetalle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="DirecciónFacturación"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.275"
-        app:layout_constraintStart_toEndOf="@+id/tvCifCliente"
-        app:layout_constraintTop_toBottomOf="@+id/tvNameCliente" />
-
-    <TextView
-        android:id="@+id/tvTelefonoCliente"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="28dp"
-        android:foregroundGravity="center_vertical|center|center_horizontal"
-        android:gravity="center|center_horizontal|center_vertical"
-        android:text="Teléfono"
-        app:layout_constraintEnd_toStartOf="@+id/tvEmailCliente"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:text="Dirección: Guerrillero Groc de Sala 11"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCifCliente" />
+        app:layout_constraintTop_toBottomOf="@+id/tvEmailClienteDetalle" />
 
-    <TextView
-        android:id="@+id/tvEmailCliente"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="176dp"
-        android:text="EmailCliente"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDireccionCliente" />
+        <TextView
+            android:id="@+id/tvTelefonoClienteDetalle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:foregroundGravity="center_vertical|center|center_horizontal"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:text="Teléfono: 633326028"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCifClienteDetalle" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvListadoFacturasDelCliente"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        <TextView
+            android:id="@+id/tvEmailClienteDetalle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Email: guillermogarciaalmeida@gmail.com"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTelefonoClienteDetalle" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="FACTURAS DEL CLIENTE"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonEliminarCliente" />
-
-    <TextView
-        android:id="@+id/tvFechaAgregadoCliente"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Fecha agregado"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTelefonoCliente" />
-
-    <Button
-        android:id="@+id/buttonModificarCliente"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="44dp"
-        android:backgroundTint="#067CCA"
-        android:text="Modificar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvFechaAgregadoCliente" />
-
-    <Button
-        android:id="@+id/buttonEliminarCliente"
-        android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvListadoFacturasDelClienteDetalle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
-        android:layout_marginEnd="88dp"
-        android:backgroundTint="#FF0000"
-        android:text="Eliminar"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/buttonModificarCliente"
-        app:layout_constraintTop_toBottomOf="@+id/tvFechaAgregadoCliente" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFacturasAsociadas" />
+
+    <TextView
+        android:id="@+id/textViewFacturasAsociadas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="serif-bold"
+        android:text="FACTURAS ASOCIADAS AL CLIENTE"
+        android:textSize="18sp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvFechaAgregadoClienteDetalle" />
+
+    <TextView
+        android:id="@+id/tvFechaAgregadoClienteDetalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:textSize="16sp"
+        android:text="Cliente agregado el: 17/03/2002"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDireccionClienteDetalle" />
+
+    <Button
+        android:id="@+id/buttonModificarClienteDetalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="#87CEEB"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="Modificar Cliente"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvListadoFacturasDelClienteDetalle" />
+
+    <Button
+        android:id="@+id/buttonEliminarClienteDetalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:layout_marginBottom="100dp"
+        android:background="#FF6666"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="Eliminar Cliente"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonModificarClienteDetalle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

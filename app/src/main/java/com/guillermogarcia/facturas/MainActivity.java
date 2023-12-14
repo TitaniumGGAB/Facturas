@@ -11,9 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,35 +32,21 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.guillermogarcia.facturas.fragments.FragmentAgregarCliente;
+import com.guillermogarcia.facturas.fragments.FragmentAgregarFactura;
 import com.guillermogarcia.facturas.fragments.FragmentClientes;
 import com.guillermogarcia.facturas.fragments.FragmentDetalleCliente;
 import com.guillermogarcia.facturas.fragments.FragmentDetalleFactura;
 import com.guillermogarcia.facturas.fragments.FragmentFacturas;
-import com.guillermogarcia.facturas.fragments.FragmentListado;
 import com.guillermogarcia.facturas.fragments.FragmentModificarCliente;
-import com.guillermogarcia.facturas.fragments.FragmentModificarFactura;
 import com.guillermogarcia.facturas.listeners.IClienteListener;
 import com.guillermogarcia.facturas.listeners.IFacturaListener;
-import com.guillermogarcia.facturas.listeners.IFacturaListener2;
-import com.guillermogarcia.facturas.modelos.Cliente;
-import com.guillermogarcia.facturas.modelos.Factura;
 
-import java.util.ArrayList;
-
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IFacturaListener, IClienteListener {
 
-    /*
-    private ArrayList<Factura> facturas;
-    private ArrayList<Cliente> clientes;
-    private final FragmentListado fragmentListado = new FragmentListado();*/
     private DrawerLayout drawer;
-    private DocumentSnapshot documentCurrentList;
-    private CollectionReference ref;
     private FirebaseFirestore db;
 
 
@@ -145,13 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        /*if(task.isSuccessful()) {
-                            if (task.getResult().size() == 0) {
 
-                            }
-                        } else {
-                            //crearDatosPrueba();
-                        }*/
                         // Mostramos las listas.
                         FragmentFacturas fragmentFacturas = new FragmentFacturas(MainActivity.this);
                         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentFacturas).commit();
@@ -159,109 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
         Log.d("Check", "MainActivity:AgetClientesFacturasFinal");
-
     }
-
-
-    /*public void getClientesFacturas(){
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        clientes = new ArrayList<>();
-        facturas = new ArrayList<>();
-
-        CollectionReference clientesRef = db.collection("Clientes");
-        CollectionReference facturasRef = db.collection("Facturas");
-        clientesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Cliente cliente = new Cliente();
-
-                        // Añadir campos uno por uno
-                        cliente.setId(document.getLong("id").intValue());
-                        cliente.setNombre(document.getString("nombre"));
-                        cliente.setApellidos(document.getString("apellidos"));
-                        cliente.setTelefono(document.getString("telefono"));
-                        cliente.setEmail(document.getString("email"));
-                        cliente.setCif(document.getString("cif"));
-                        cliente.setDireccion(document.getString("direccion"));
-                        cliente.setFecha_agregado(document.getDate("fecha_agregado"));
-
-                        // Ahora, en lugar de convertir directamente el campo Facturas, obtén las referencias
-                        List<DocumentReference> facturasRefs = (List<DocumentReference>) document.get("facturas");
-
-                        // Contador para realizar un seguimiento de cuántas facturas se han recuperado
-                        AtomicInteger count = new AtomicInteger(0);
-
-                        // Lista para almacenar las facturas asociadas al cliente
-                        ArrayList<Factura> facturasCliente = new ArrayList<>();
-
-                        // Recupera los documentos de factura asociados a las referencias
-                        for (DocumentReference facturaRef : facturasRefs) {
-                            facturaRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    // Convierte el documento Factura a un objeto Factura
-                                    Factura factura = documentSnapshot.toObject(Factura.class);
-
-                                    // Añade la factura a la lista de facturas del cliente
-                                    facturasCliente.add(factura);
-
-                                    // Incrementa el contador
-                                    int currentCount = count.incrementAndGet();
-
-                                    // Si se han recuperado todas las facturas, agrega el cliente a la lista
-                                    if (currentCount == facturasRefs.size()) {
-                                        cliente.setFacturas(facturasCliente);
-                                        clientes.add(cliente);
-                                        Log.d("hola", "Comprobación");
-                                        Log.d("hola", "El tamaño de clientes es " + clientes.size() + ". El tamaño de lo recibido es " + task.getResult().size());
-                                        fragmentListado.setClientes(clientes);
-                                        cargarFacturas();
-
-                                        // Notifica que se han cargado todos los clientes con sus facturas asociadas
-                                        if (clientes.size() == task.getResult().size()) {
-                                            Log.d("hola", "Comprobación2");
-                                            fragmentListado.setClientes(clientes);
-                                            cargarFacturas();
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-                } else {
-                    Log.e("TAG", "Error al leer los clientes: " + task.getException());
-                }
-            }
-        });
-    }*/
-
-/*    public void cargarFacturas() {
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference facturasRef = db.collection("Facturas");
-
-        facturasRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Factura factura = document.toObject(Factura.class);
-                        Log.d("hola", "Hola");
-                        facturas.add(factura);
-                    }
-                    fragmentListado.setFacturas(facturas);
-                    loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false); // Llamar a loadFragmentListado aquí
-                } else {
-                    Log.e("TAG", "Error al leer las facturas: " + task.getException());
-                }
-            }
-        });
-    }*/
 
 
 
@@ -272,8 +148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_clientes) {
             Log.d("Check", "MainActivity:AonNavigationItemSelectd Clientes1");
-            //fragmentListado.setClientes(clientes);
-            //fragmentListado.setFacturas(facturas);
             FragmentClientes f = new FragmentClientes(MainActivity.this);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).commit();
             setTitle("Clientes");
@@ -288,83 +162,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setTitle("Facturas");
             Log.d("Check", "MainActivity:AonNavigationItemSelectd Facturas");
             //loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
+        }else if (id == R.id.nav_agregar_cliente) {
+            Log.d("Check", "MainActivity:AonNavigationItemSelectd Agregar Cliente");
+            //fragmentListado.setClientes(clientes);
+            //fragmentListado.setFacturas(facturas);
+            FragmentAgregarCliente f = new FragmentAgregarCliente();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).commit();
+            setTitle("Agregar cliente");
+            Log.d("Check", "MainActivity:AonNavigationItemSelectd Agregra Cliente ");
+            //loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
+        }
+        else if (id == R.id.nav_agregar_factura) {
+            Log.d("Check", "MainActivity:AonNavigationItemSelectd Agregar Factura");
+            FragmentAgregarFactura f = new FragmentAgregarFactura();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).commit();
+            setTitle("Agregar factura");
+            Log.d("Check", "MainActivity:AonNavigationItemSelectd Agregra Factura ");
+            //loadFragmentListado(FragmentListado.TipoListado.SEGUN_FACTURA, "Facturas", false);
         }
         drawer.closeDrawer(GravityCompat.START);
         Log.d("Check", "MainActivity:AonNavigationItemSelectd Final");
         return true;
     }
 
-/*    public void loadFragmentListado(FragmentListado.TipoListado listado, String titulo, Boolean modificar){
-        if(modificar){
-            fragmentListado.setModificar(true);
-        }else{
-            Bundle bundle;
-            fragmentListado.setFacturasListener(this);
-            fragmentListado.setClientesListener(this);
-            bundle = new Bundle();
-            bundle.putSerializable(FragmentListado.TIPO, listado);
-            fragmentListado.setArguments(bundle);
-
-            if(listado.equals(FragmentListado.TipoListado.SEGUN_CLIENTE)){
-                Log.d("Check", "equals Cliente");
-
-                FragmentListado fragmentListado2 = new FragmentListado();
-
-                fragmentListado2.setClientes(clientes);
-                fragmentListado2.setFacturas(facturas);
-                Bundle bundle2;
-                fragmentListado2.setFacturasListener(this);
-                fragmentListado2.setClientesListener(this);
-                bundle2 = new Bundle();
-                bundle2.putSerializable(FragmentListado.TIPO, listado);
-                fragmentListado2.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentListado2).commit();
-                setTitle(titulo);
-            }else {
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragmentListado).commit();
-                setTitle(titulo);
-            }
-        }
-
-    }*/
-
-
-    //habría que hacer un método así en DetalleActivity para cargar el fragmentModificarCliente/Factura
-/*    @Override
-    public void onFacturaSeleccionado(Factura factura) {
-        if(fragmentListado.isModificar()){
-            FragmentModificarFactura f = new FragmentModificarFactura(clientes);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(FragmentModificarFactura.FACTURA_MODIFICAR_DETALLE, factura);
-            f.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
-        }else{
-            FragmentDetalleFactura f = new FragmentDetalleFactura();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(FragmentDetalleFactura.FACTURA_EXTRA_DETALLE, factura);
-            f.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
-        }
-
-    }*/
-/*
-    @Override
-    public void onClienteSeleccionado(Cliente cliente) {
-        if(fragmentListado.isModificar()){
-            FragmentModificarCliente f = new FragmentModificarCliente();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(FragmentModificarCliente.CLIENTE_MODIFICAR_DETALLE, cliente);
-            f.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
-        }else{
-            FragmentDetalleCliente f = new FragmentDetalleCliente();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(FragmentDetalleCliente.CLIENTE_EXTRA_DETALLE, cliente);
-            f.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
-        }
-
-    }*/
 
 
 
@@ -401,40 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onFacturaListSelected(DocumentSnapshot documentSnapshot, int position) {
-        /*Log.d("Check", "MainActivity:AonFacturas3ListSelected 1");
-        Cliente cliente = new Cliente();
-        cliente.setId(1);
-        cliente.setFacturas(null);
-        cliente.setNombre("Juan");
-        cliente.setApellidos("García");
-        cliente.setCif("53629333A");
-        cliente.setDireccion("Guerrillero groc de sala");
-        cliente.setEmail("Guillermo@gmail.coc");
-        cliente.setFecha_agregado(new Date());
-        cliente.setTelefono("633327028");
 
-
-        Factura factura = new Factura();
-        factura.setId(1);
-        factura.setNumeroFactura("E001");
-        factura.setBorrador(false);
-        factura.setBaseImponible(100);
-        factura.setDescripcion("loremp ipsun");
-        factura.setFecha(new Date());
-        factura.setFechaModificacion(new Date());
-        factura.setIvaPrecio(23);
-        factura.setPagado(true);
-        factura.setPrecioTotal(500);
-        factura.setCliente(cliente);
-
-
-
-        FragmentDetalleFactura f = new FragmentDetalleFactura();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(FragmentDetalleFactura.FACTURA_EXTRA_DETALLE, factura);
-        f.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f).addToBackStack(null).commit();
-        Log.d("Check", "MainActivity:AonFacturas3ListSelected 2");*/
     }
 
     @Override

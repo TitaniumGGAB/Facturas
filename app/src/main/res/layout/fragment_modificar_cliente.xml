@@ -1,9 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="UseSwitchCompatOrMaterialXml">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UseSwitchCompatOrMaterialXml">
 
     <TextView
         android:id="@+id/textView3"
@@ -11,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:fontFamily="sans-serif-light"
-        android:text="AGREGAR CLIENTE"
+        android:text="MODIFICAR CLIENTE"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -21,7 +26,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputNombre"
+        android:id="@+id/inputNombreModificar"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -31,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <EditText
-            android:id="@+id/agregarNombreCliente"
+            android:id="@+id/modificarNombreCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
@@ -42,17 +47,17 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputApellidos"
+        android:id="@+id/inputApellidosModificar"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputNombre">
+        app:layout_constraintTop_toBottomOf="@+id/inputNombreModificar">
 
         <EditText
-            android:id="@+id/agregarApellidosCliente"
+            android:id="@+id/modificarApellidosCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
@@ -63,17 +68,17 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputTelefono"
+        android:id="@+id/inputTelefonoModificar"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputApellidos">
+        app:layout_constraintTop_toBottomOf="@+id/inputApellidosModificar">
 
         <EditText
-            android:id="@+id/agregarTelefonoCliente"
+            android:id="@+id/modificarTelefonoCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
@@ -84,17 +89,17 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputEmail"
+        android:id="@+id/inputEmailModificar"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputTelefono">
+        app:layout_constraintTop_toBottomOf="@+id/inputTelefonoModificar">
 
         <EditText
-            android:id="@+id/agregarEmailCliente"
+            android:id="@+id/modificarEmailCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
@@ -106,17 +111,17 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputCif"
+        android:id="@+id/inputCifModificar"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputEmail">
+        app:layout_constraintTop_toBottomOf="@+id/inputEmailModificar">
 
         <EditText
-            android:id="@+id/agregarCifCliente"
+            android:id="@+id/modificarCifCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
@@ -127,39 +132,61 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputDireccion"
+        android:id="@+id/inputDireccionModificar"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputCif">
+        app:layout_constraintTop_toBottomOf="@+id/inputCifModificar">
+
 
         <EditText
-            android:id="@+id/agregarDireccionCliente"
+            android:id="@+id/modificarDireccionCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:hint="Dirección"
             tools:layout_editor_absoluteX="0dp" />
 
+
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/buttonAgregarCliente"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:text="Agregar  Cliente"
-        android:textColor="#FFFFFF"
-        android:background="#87CEEB"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputDireccion" />
+
+        <Button
+            android:id="@+id/buttonClienteModificar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:background="#87CEEB"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="Modificar  Cliente"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputDireccionModificar" />
+
+        <Button
+            android:id="@+id/buttonClienteEliminar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="100dp"
+            android:background="#FF6666"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="Eliminar  Cliente"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonClienteModificar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,23 +1,16 @@
 package com.guillermogarcia.facturas.modelos;
 
+import android.util.Log;
+
+import com.google.firebase.firestore.DocumentReference;
+
 import java.io.Serializable;
 import java.util.Date;
-//import java.sql.Date;
-/*Factura:
-id,
-cliente,
-numero_factura,
-fecha_modificacion,
-fecha_factura,
-(Integer) estado(pagado, pendiente, presupuesto),
-descripción,
-base_imponible,
-iva,
-total.*/
 
 public class Factura implements Serializable, Comparable<Factura> {
 
-    private int id;
+
+    private String identificador;
     private String numeroFactura;
     private Date fecha;
     private String descripcion;
@@ -29,15 +22,18 @@ public class Factura implements Serializable, Comparable<Factura> {
     private boolean pagado;
     private boolean borrador;
 
-    private Cliente cliente;
+    private String cliente;
+
 
 
     public Factura(){
 
     }
 
-    public Factura(int id, String numeroFactura, Date fecha, String descripcion, double baseImponible, double ivaPrecio, double precioTotal, Date fechaModificacion, boolean pagado, boolean borrador, Cliente cliente) {
-        this.id = id;
+    public Factura(String identificador, String numeroFactura, Date fecha, String descripcion, double baseImponible, double ivaPrecio, double precioTotal, Date fechaModificacion, boolean pagado, boolean borrador, String cliente) {
+
+        Log.d("Factura", "Número de factura: " + numeroFactura);
+        this.identificador = identificador;
         this.numeroFactura = numeroFactura;
         this.fecha = fecha;
         this.descripcion = descripcion;
@@ -48,6 +44,7 @@ public class Factura implements Serializable, Comparable<Factura> {
         this.pagado = pagado;
         this.borrador = borrador;
         this.cliente = cliente;
+
     }
 
     @Override
@@ -61,12 +58,12 @@ public class Factura implements Serializable, Comparable<Factura> {
         }
     }
 
-    public int getId() {
-        return id;
+    public String getIdentificador() {
+        return identificador;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdentificador(String id) {
+        this.identificador = id;
     }
 
     public String getNumeroFactura() {
@@ -142,12 +139,13 @@ public class Factura implements Serializable, Comparable<Factura> {
         this.borrador = borrador;
     }
 
-    public Cliente getCliente() {
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getCliente(){
         return cliente;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
 
 }

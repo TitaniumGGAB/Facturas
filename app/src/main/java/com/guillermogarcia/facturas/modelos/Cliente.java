@@ -9,8 +9,7 @@ import java.util.List;
 
 public class Cliente implements Serializable {
 
-
-    private int id;
+    private String identificador;
     private String nombre;
     //Los apellidos son opcional porque una empresa no tiene apellidos
     private String apellidos;
@@ -20,20 +19,16 @@ public class Cliente implements Serializable {
     private String direccion;
     private Date fecha_agregado;
 
-    private ArrayList<DocumentReference> facturas;
+    private List<String> facturas;
 
 
-    //El id tendrá que ser autonumérico
-    //En el fragment de los clientes tiene que aparecer
-    //un botón círculo abajo/derecha de agregar un cliente.
-    // Y lo mismo en el fragment de facturas
 
     public Cliente(){
 
     }
 
-    public Cliente(int id, String nombre, String apellidos, String telefono, String email,  String cif, String direccion, Date fecha_agregado, ArrayList<DocumentReference> facturas) {
-        this.id = id;
+    public Cliente(String identificador, String nombre, String apellidos, String telefono, String email,  String cif, String direccion, Date fecha_agregado, List<String> facturas) {
+        this.identificador = identificador;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.telefono = telefono;
@@ -44,12 +39,12 @@ public class Cliente implements Serializable {
         this.facturas = facturas;
     }
 
-    public int getId() {
-        return id;
+    public String getIdentificador() {
+        return identificador;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
     }
 
     public String getNombre() {
@@ -108,18 +103,19 @@ public class Cliente implements Serializable {
         this.fecha_agregado = fecha_agregado;
     }
 
-    public ArrayList<DocumentReference> getFacturas() {
+    public List<String> getFacturas() {
         return facturas;
     }
 
-    public void setFacturas(ArrayList<DocumentReference> facturas) {
+    public void setFacturas(List<String> facturas) {
         this.facturas = facturas;
     }
 
     @Override
     public String toString() {
-        return "Cliente{" +
-                "id=" + id +
+       return  nombre + " " + apellidos + " " + cif;
+  /*     return "Cliente{" +
+                "identificador=" + identificador +
                 ", nombre='" + nombre + '\'' +
                 ", apellidos='" + apellidos + '\'' +
                 ", telefono='" + telefono + '\'' +
@@ -128,6 +124,6 @@ public class Cliente implements Serializable {
                 ", direccion='" + direccion + '\'' +
                 ", fecha agregado='" + fecha_agregado + '\'' +
                 ", facturas=" + facturas +
-                '}';
+                '}';*/
     }
 }
